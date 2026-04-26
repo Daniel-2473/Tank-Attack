@@ -9,10 +9,11 @@
 class Queue {
 public:
 
-    void Add(int* element);
+    void Insert(int* element);
     Queue();
     int* Dequeue();
     bool isEmpty();
+    ~Queue();
 
 private:
     int** arr;

@@ -15,7 +15,7 @@ Queue::Queue() {
     }
 }
 
-void Queue::Add(int* element) {
+void Queue::Insert(int* element) {
     if (used == 0) {
         arr[front] = element;
     }
@@ -60,7 +60,7 @@ int* Queue::Dequeue() {
 }
 
 void Queue::Resize() {
-    int** newArr = new int*[size + 10];
+    int** newArr = new int*[size*2];
     int count  = 0;
     if (rear >= front) {
         for (int i = front; i <= rear; i++) {
@@ -77,7 +77,7 @@ void Queue::Resize() {
             count++;
         }
     }
-    size += 10;
+    size *= 2;
     front = 0;
     rear = count-1;
     delete[] arr;
@@ -87,4 +87,8 @@ void Queue::Resize() {
 
 bool Queue::isEmpty() {
     return used == 0;
+}
+
+Queue::~Queue() {
+    delete[] arr;
 }
