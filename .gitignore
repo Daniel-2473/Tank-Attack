@@ -39,3 +39,12 @@
 
 # debug information files
 *.dwo
+
+# CLion and IDEs
+.idea/
+.vscode/
+*.user
+
+# CMake Build Folders
+cmake-build-*/
+out/
