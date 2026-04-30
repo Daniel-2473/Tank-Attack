@@ -4,16 +4,25 @@
 
 #ifndef TANQUITOS_PRIORITYQUEUE_H
 #define TANQUITOS_PRIORITYQUEUE_H
+#include "Nodo.h"
 
+struct NodeCosts {
+    Nodo* node;
+    int weight;
+    float heuristic;
+    float total;
+};
 
 class PriorityQueue {
 public:
-    void Insert(int* element);
-    int* Dequeue();
+    void Insert(NodeCosts element);
+    NodeCosts Dequeue();
     PriorityQueue();
     ~PriorityQueue();
+    bool IsEmpty();
+
 private:
-    int** arr;
+    NodeCosts* arr;
     void Resize();
     int count;
     int size;

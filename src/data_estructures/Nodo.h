@@ -18,8 +18,6 @@ private:
     //para definir si es una pared o no
     bool Pared;
 
-
-
 public:
     // constructor publico para poder crearlo fuera
     Nodo(int id, float x,float y);

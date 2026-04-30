@@ -5,31 +5,27 @@
 #include "PriorityQueue.h"
 
 PriorityQueue::PriorityQueue() {
-    this->arr = new int*[10];
+    this->arr = new NodeCosts[10];
     this->count = -1;
     this->size = 10;
 }
 
-void PriorityQueue::Insert(int* element) {
+void PriorityQueue::Insert(NodeCosts element) {
     if (count == size-1) {
         Resize();
     }
     count++;
     arr[count] = element;
     int index = count;
-    while (index > 0 && *arr[index] < *arr[(index-1)/2]) {
+    while (index > 0 && arr[index].total < arr[(index-1)/2].total) {
         Swap(index, (index-1)/2);
         index = (index-1)/2;
     }
 }
 
-int* PriorityQueue::Dequeue() {
-    if (count == -1) {
-        return nullptr;
-    }
-    int* element = arr[0];
+NodeCosts PriorityQueue::Dequeue() {
+    NodeCosts element = arr[0];
     arr[0] = arr[count];
-    arr[count] = nullptr;
     count--;
     int index = 0;
     while (true) {
@@ -37,10 +33,10 @@ int* PriorityQueue::Dequeue() {
         int right = 2*index+2;
         int smallest = index;
 
-        if (left <= count && *arr[left] < *arr[smallest]) {
+        if (left <= count && arr[left].total < arr[smallest].total) {
             smallest = left;
         }
-        if (right <= count && *arr[right] < *arr[smallest]) {
+        if (right <= count && arr[right].total < arr[smallest].total) {
             smallest = right;
         }
         if (smallest == index) break;
@@ -52,7 +48,7 @@ int* PriorityQueue::Dequeue() {
 }
 
 void PriorityQueue::Resize() {
-    int** newArr = new int*[size*2];
+    NodeCosts* newArr = new NodeCosts[size*2];
     for (int i = 0; i<size; i++) {
         newArr[i] = arr[i];
     }
@@ -63,11 +59,15 @@ void PriorityQueue::Resize() {
 }
 
 void PriorityQueue::Swap(int indexA, int indexB) {
-    int* temp = arr[indexA];
+    NodeCosts temp = arr[indexA];
     arr[indexA] = arr[indexB];
     arr[indexB] = temp;
 }
 
 PriorityQueue::~PriorityQueue() {
     delete[] arr;
+}
+
+bool PriorityQueue::IsEmpty() {
+    return count == -1;
 }
