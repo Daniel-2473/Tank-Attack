@@ -18,6 +18,7 @@ add_executable(Tanquitos src/main/main.cpp
         src/data_estructures/PriorityQueue.cpp
         src/data_estructures/PriorityQueue.h
         src/data_estructures/Nodo.h
+        src/data_estructures/Nodo.cpp
         src/data_estructures/Grafo.cpp
         src/data_estructures/Grafo.h)
 target_compile_features(Tanquitos PRIVATE cxx_std_17)

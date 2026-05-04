@@ -18,6 +18,12 @@ Nodo::Nodo(int id, float x, float y) {
     this-> y  = y;
     this-> Pared = false;
 }
+Nodo::Nodo() {
+    id = -1;
+    x = 0;
+    y = 0;
+    Pared = false;
+}
 
 int Nodo::getid() {
     return id;

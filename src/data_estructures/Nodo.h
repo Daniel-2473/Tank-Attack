@@ -21,6 +21,7 @@ private:
 public:
     // constructor publico para poder crearlo fuera
     Nodo(int id, float x,float y);
+    Nodo();
     // destructor
     ~Nodo();
 
