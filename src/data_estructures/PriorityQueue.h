@@ -6,7 +6,7 @@
 #define TANQUITOS_PRIORITYQUEUE_H
 #include "Nodo.h"
 
-struct NodeCosts {
+struct NodeCosts {//Struct de utilidad para Djisktra y A*
     Nodo* node;
     int weight;
     float heuristic;

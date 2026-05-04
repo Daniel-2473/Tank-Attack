@@ -23,6 +23,9 @@ public:
     ~Grafo();
 
     void CreadorDeConecciones(int idA, int idB);
+    int ObtenerCantidadNodos();
+    bool EsNodoPared(int id);
+    bool EsVecino(int id, int j);
 
 };
 

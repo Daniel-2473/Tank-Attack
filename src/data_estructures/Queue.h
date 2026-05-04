@@ -9,14 +9,14 @@
 class Queue {
 public:
 
-    void Insert(int* element);
+    void Insert(int element);
     Queue();
-    int* Dequeue();
-    bool isEmpty();
+    int Dequeue();
+    bool IsEmpty();
     ~Queue();
 
 private:
-    int** arr;
+    int* arr;
     int front;
     int rear;
     int used;

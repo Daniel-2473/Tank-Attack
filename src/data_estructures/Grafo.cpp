@@ -32,8 +32,6 @@ Grafo::Grafo(int filas, int columnas) {
 
             int id =i*columnas+j;// formula para que queden de forma ascendente desde 0 horizontalmente
             MatrizDeNodos[i][j]=Nodo(id,j,i);//se crean los nodos correctamente es j, i porque filas es el y y columnas el x
-
-
         }
     }
 
@@ -65,6 +63,24 @@ Grafo::Grafo(int filas, int columnas) {
         }
     }
 }
+
+int Grafo::ObtenerCantidadNodos() {
+    return filas*columnas;
+}
+
+bool Grafo::EsVecino(int id, int j) {
+    if (adyacenciaDeNodos[id][j] == 1) {
+        return true;
+    }
+    return false;
+}
+
+bool Grafo::EsNodoPared(int id) {
+    int i = id / columnas;
+    int j = id % columnas;
+    return MatrizDeNodos[i][j].esPared();
+}
+
 
 
 
