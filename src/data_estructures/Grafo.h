@@ -26,6 +26,7 @@ public:
     int ObtenerCantidadNodos();
     bool EsNodoPared(int id);
     bool EsVecino(int id, int j);
+    int CalculateHeuristic(int currentId, int endId);
 
 };
 

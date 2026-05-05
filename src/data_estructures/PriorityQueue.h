@@ -9,8 +9,8 @@
 struct NodeCosts {//Struct de utilidad para Djisktra y A*
     int nodeId;
     int weight;
-    float heuristic;
-    float total;
+    int heuristic;
+    int total;
 };
 
 class PriorityQueue {

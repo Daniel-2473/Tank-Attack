@@ -25,6 +25,8 @@ add_executable(Tanquitos src/main/main.cpp
         src/algorithms/BFS.cpp
         src/algorithms/Dijkstra.cpp
         src/algorithms/Dijkstra.h
+        src/algorithms/Astar.cpp
+        src/algorithms/Astar.h
 )
 target_compile_features(Tanquitos PRIVATE cxx_std_17)
 target_link_libraries(Tanquitos PRIVATE SFML::Graphics)

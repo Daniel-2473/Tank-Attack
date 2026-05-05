@@ -81,6 +81,17 @@ bool Grafo::EsNodoPared(int id) {
     return MatrizDeNodos[i][j].esPared();
 }
 
+int Grafo::CalculateHeuristic(int currentId, int endId) {
+    int x1 = currentId / columnas;
+    int y1 = currentId % columnas;
+
+    int x2 = endId / columnas;
+    int y2 = endId % columnas;
+
+    int h = abs(x1 - x2) + abs(y1 - y2);
+    return h;
+}
+
 
 
 
