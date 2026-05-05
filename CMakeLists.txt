@@ -23,6 +23,8 @@ add_executable(Tanquitos src/main/main.cpp
         src/data_estructures/Grafo.h
         src/algorithms/BFS.h
         src/algorithms/BFS.cpp
+        src/algorithms/Dijkstra.cpp
+        src/algorithms/Dijkstra.h
 )
 target_compile_features(Tanquitos PRIVATE cxx_std_17)
 target_link_libraries(Tanquitos PRIVATE SFML::Graphics)

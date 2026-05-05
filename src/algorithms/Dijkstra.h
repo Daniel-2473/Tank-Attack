@@ -1,0 +1,18 @@
+//
+// Created by danie on 5/4/2026.
+//
+
+#ifndef TANQUITOS_DIJKSTRA_H
+#define TANQUITOS_DIJKSTRA_H
+
+#endif //TANQUITOS_DIJKSTRA_H\
+
+#include "../data_estructures/Grafo.h"
+#include "../data_estructures/PriorityQueue.h"
+
+int* Dijsktra(int startId, int endId, Grafo& grafo, int& size);
+int* ResizeArray(int* arr, int& size);
+int* ReverseArray(int* arr, int used);
+int* CreateRoute(int* parents, int lastNode, int graphSize, int& size);
+void InsertNeighbors(PriorityQueue& queue, int graphSize, NodeCosts& node, Grafo& grafo, int*& parents, float* costSoFar);
+void SetNodeData(NodeCosts node, int Id, Grafo& grafo);
