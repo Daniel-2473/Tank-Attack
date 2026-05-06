@@ -25,8 +25,11 @@ public:
     void CreadorDeConecciones(int idA, int idB);
     int ObtenerCantidadNodos();
     bool EsNodoPared(int id);
+    void HacerPared(int id);
+    void QuitarPared(int id);
     bool EsVecino(int id, int j);
-
+    int ObtenerFilas();
+    int ObtenerColumnas();
 };
 
 

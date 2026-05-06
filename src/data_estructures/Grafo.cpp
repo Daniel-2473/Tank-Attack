@@ -81,12 +81,72 @@ bool Grafo::EsNodoPared(int id) {
     return MatrizDeNodos[i][j].esPared();
 }
 
+void Grafo::HacerPared(int id) {
+    int i = id / columnas;
+    int j = id % columnas;
+    MatrizDeNodos[i][j].HacerQuitarPared(true);
+
+    for (int k =0;k<filas*columnas;k++) {
+        adyacenciaDeNodos[k][id]=0;
+        adyacenciaDeNodos[id][k]=0;
+    }
+}
+
+void Grafo::QuitarPared(int id) {
+    int i = id / columnas;
+    int j = id % columnas;
+    MatrizDeNodos[i][j].HacerQuitarPared(false);
+
+
+    int totalNodos=columnas*filas;
+    for (int k=0;k<totalNodos;k++) {
+        adyacenciaDeNodos[id][k]=0;
+        adyacenciaDeNodos[k][id]=0;
+
+    }
+    //nodoarriba
+    if (i>0&& MatrizDeNodos[i-1][j].esPared()==false) {
+        int arriba= (i-1)*columnas+j;
+        adyacenciaDeNodos[id][arriba]=1;
+        adyacenciaDeNodos[arriba][id]=1;
+    }
+    //nodo abajo
+    if (i+1<filas&&MatrizDeNodos[i+1][j].esPared()==false) {
+        int abajo= (i+1)*columnas+j;
+        adyacenciaDeNodos[id][abajo]=1;
+        adyacenciaDeNodos[abajo][id]=1;
+    }
+
+    //nodo derecha
+    if (j+1<columnas&&MatrizDeNodos[i][j+1].esPared()==false) {
+        int derecha= i*columnas+(j+1);
+        adyacenciaDeNodos[id][derecha]=1;
+        adyacenciaDeNodos[derecha][id]=1;
+    }
+    //nodo izquierda
+
+    if (j>0&&MatrizDeNodos[i][j-1].esPared()==false) {
+        int izquierda= i*columnas+(j-1);
+        adyacenciaDeNodos[id][izquierda]=1;
+        adyacenciaDeNodos[izquierda][id]=1;
+
+
+    }
 
 
 
 
 
 
+}
 
+
+int Grafo::ObtenerFilas() {
+    return filas;
+}
+
+int Grafo::ObtenerColumnas() {
+    return columnas;
+}
 
 
