@@ -7,10 +7,10 @@
 #include "Nodo.h"
 
 struct NodeCosts {//Struct de utilidad para Djisktra y A*
-    Nodo* node;
+    int nodeId;
     int weight;
-    float heuristic;
-    float total;
+    int heuristic;
+    int total;
 };
 
 class PriorityQueue {

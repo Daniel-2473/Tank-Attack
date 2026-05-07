@@ -103,6 +103,8 @@ void Grafo::QuitarPared(int id) {
         adyacenciaDeNodos[id][k]=0;
         adyacenciaDeNodos[k][id]=0;
 
+
+
     }
     //nodoarriba
     if (i>0&& MatrizDeNodos[i-1][j].esPared()==false) {
@@ -149,4 +151,13 @@ int Grafo::ObtenerColumnas() {
     return columnas;
 }
 
+int Grafo::CalculateHeuristic(int currentId, int endId) {
+    int x1 = currentId / columnas;
+    int y1 = currentId % columnas;
 
+    int x2 = endId / columnas;
+    int y2 = endId % columnas;
+
+    int h = abs(x1 - x2) + abs(y1 - y2);
+    return h;
+}

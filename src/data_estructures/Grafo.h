@@ -30,6 +30,8 @@ public:
     bool EsVecino(int id, int j);
     int ObtenerFilas();
     int ObtenerColumnas();
+    int CalculateHeuristic(int currentId, int endId);
+
 };
 
 
