@@ -26,11 +26,6 @@ public:
 
     void Mover(int nuevaposicion);
     void bajarVida(int porcentaje);
-
-
-
-
-
 };
 
 

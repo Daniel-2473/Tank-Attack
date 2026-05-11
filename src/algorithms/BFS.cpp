@@ -6,38 +6,6 @@
 #include "../data_estructures/Queue.h"
 #include "../data_estructures/Grafo.h"
 
-int* BFS(int startId, int endId, Grafo& grafo, int& size) {
-    if (startId == endId) { //Caso especial donde sean iguales
-        int* route = new int[1] {startId};
-        size = 1;
-        return route;
-    }
-    Queue queue;
-    int graphSize = grafo.ObtenerCantidadNodos(); //Cantidad de nodos (filas*columnas)
-    int currentNode = startId;
-    int* parents = new int[graphSize]; //Lista de padres para cada nodo
-    bool* visited = new bool[graphSize](); //Lista para verificar si han sido visitados
-    //Las listas se basan en que cada nodo tiene un Id unico, dicho Id es un numero de 0 a la cantidad de nodos
-    queue.Insert(startId);
-    visited[startId] = true;
-    parents[startId] = -1;
-    while (!queue.IsEmpty()) { //Minetras tengamamos elementos en cola
-        currentNode = queue.Dequeue(); //Tomamos un elemento de la cola
-        if (endId == currentNode) { //Si es el nodo final no recorremos los demas, ya hemos encontrado la ruta
-            break;
-        }
-        InsertNeighbors(queue, graphSize, currentNode, grafo, parents, visited); //Si no, seguimos visitando nodos
-    }
-    if (!visited[endId]) { //Caso especial en el que no haya ruta posible (caso que no deberia ser posible)
-        delete[] parents;
-        delete[] visited;
-        throw std::logic_error("No possible route");
-    }
-    int* route = CreateRoute(parents, currentNode, graphSize, size); //Creamos la ruta en un array de los ids de cada nodo
-    delete[] parents;
-    delete[] visited;
-    return route;
-}
 
 int* ReverseArray(int* arr, int used) { //Invierte un array el cual puede no estar lleno
     int* newArr = new int[used];
@@ -76,4 +44,35 @@ void InsertNeighbors(Queue &queue, int graphSize, int currentNode, Grafo& grafo,
 }
 
 
-
+int* BFS(int startId, int endId, Grafo& grafo, int& size) {
+    if (startId == endId) { //Caso especial donde sean iguales
+        int* route = new int[1] {startId};
+        size = 1;
+        return route;
+    }
+    Queue queue;
+    int graphSize = grafo.ObtenerCantidadNodos(); //Cantidad de nodos (filas*columnas)
+    int currentNode = startId;
+    int* parents = new int[graphSize]; //Lista de padres para cada nodo
+    bool* visited = new bool[graphSize](); //Lista para verificar si han sido visitados
+    //Las listas se basan en que cada nodo tiene un Id unico, dicho Id es un numero de 0 a la cantidad de nodos
+    queue.Insert(startId);
+    visited[startId] = true;
+    parents[startId] = -1;
+    while (!queue.IsEmpty()) { //Minetras tengamamos elementos en cola
+        currentNode = queue.Dequeue(); //Tomamos un elemento de la cola
+        if (endId == currentNode) { //Si es el nodo final no recorremos los demas, ya hemos encontrado la ruta
+            break;
+        }
+        InsertNeighbors(queue, graphSize, currentNode, grafo, parents, visited); //Si no, seguimos visitando nodos
+    }
+    if (!visited[endId]) { //Caso especial en el que no haya ruta posible (caso que no deberia ser posible)
+        delete[] parents;
+        delete[] visited;
+        throw std::logic_error("No possible route");
+    }
+    int* route = CreateRoute(parents, currentNode, graphSize, size); //Creamos la ruta en un array de los ids de cada nodo
+    delete[] parents;
+    delete[] visited;
+    return route;
+}

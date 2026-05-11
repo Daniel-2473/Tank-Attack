@@ -136,10 +136,6 @@ void Grafo::QuitarPared(int id) {
     }
 
 
-
-
-
-
 }
 
 

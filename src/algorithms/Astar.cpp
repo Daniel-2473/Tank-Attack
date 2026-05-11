@@ -8,6 +8,47 @@
 #include "../data_estructures/PriorityQueue.h"
 #include "../data_estructures/Grafo.h"
 
+
+int* ReverseArray(int* arr, int used) { //Invierte un array el cual puede no estar lleno
+    int* newArr = new int[used];
+    int arrPos;
+    for (int i = 0; i < used; i++) {
+        arrPos = used-i-1;
+        newArr[i] = arr[arrPos];
+    }
+    delete[] arr;
+    return newArr;
+}
+
+int *CreateRoute(int *parents, int lastNode, int graphSize, int& size) { //Recrear la ruta de nodos
+    int* route = new int[graphSize];
+    int currentNode = lastNode;
+    int count = 0;
+    while (currentNode != -1) { //Vamos visitando los padres de cada nodo desde el ultimo que visitamos anteriormente, asi se obtiene la ruta
+        route[count] = currentNode;
+        count++;
+        currentNode = parents[currentNode];
+    }
+    size = count;
+    return ReverseArray(route, count); //Necesitamos invetir la ruta, ya que va desde el nodo final al inicial
+}
+
+void InsertNeighbors(PriorityQueue &queue, int graphSize, NodeCosts& currentNode, Grafo& grafo, int*& parents, int* costSoFar, int endId) {
+    int currentCost;
+    for (int i = 0; i < graphSize; i++) {
+        if (grafo.EsVecino(currentNode.nodeId, i)) { //Recorrer los nodos del grafo y verificar cuales son vecinos de donde estamos posicionados
+            currentCost = costSoFar[currentNode.nodeId] + 1;
+            if (!grafo.EsNodoPared(i) && costSoFar[i] > currentCost) {
+                int heuristic = grafo.CalculateHeuristic(i, endId);
+                NodeCosts newNode = {i, 1, heuristic, currentCost + heuristic};
+                queue.Insert(newNode);
+                parents[i] = currentNode.nodeId;
+                costSoFar[i] = currentCost;
+            }
+        }
+    }
+}
+
 int* Astar(int startId, int endId, Grafo& grafo, int& size) {
     if (startId == endId) { //Caso especial donde sean iguales
         int* route = new int[1] {startId};
@@ -49,46 +90,6 @@ int* Astar(int startId, int endId, Grafo& grafo, int& size) {
     delete[] visited;
     delete[] costsSoFar;
     return route;
-}
-
-int* ReverseArray(int* arr, int used) { //Invierte un array el cual puede no estar lleno
-    int* newArr = new int[used];
-    int arrPos;
-    for (int i = 0; i < used; i++) {
-        arrPos = used-i-1;
-        newArr[i] = arr[arrPos];
-    }
-    delete[] arr;
-    return newArr;
-}
-
-int *CreateRoute(int *parents, int lastNode, int graphSize, int& size) { //Recrear la ruta de nodos
-    int* route = new int[graphSize];
-    int currentNode = lastNode;
-    int count = 0;
-    while (currentNode != -1) { //Vamos visitando los padres de cada nodo desde el ultimo que visitamos anteriormente, asi se obtiene la ruta
-        route[count] = currentNode;
-        count++;
-        currentNode = parents[currentNode];
-    }
-    size = count;
-    return ReverseArray(route, count); //Necesitamos invetir la ruta, ya que va desde el nodo final al inicial
-}
-
-void InsertNeighbors(PriorityQueue &queue, int graphSize, NodeCosts& currentNode, Grafo& grafo, int*& parents, int* costSoFar, int endId) {
-    int currentCost;
-    for (int i = 0; i < graphSize; i++) {
-        if (grafo.EsVecino(currentNode.nodeId, i)) { //Recorrer los nodos del grafo y verificar cuales son vecinos de donde estamos posicionados
-            currentCost = costSoFar[currentNode.nodeId] + 1;
-            if (!grafo.EsNodoPared(i) && costSoFar[i] > currentCost) {
-                int heuristic = grafo.CalculateHeuristic(i, endId);
-                NodeCosts newNode = {i, 1, heuristic, currentCost + heuristic};
-                queue.Insert(newNode);
-                parents[i] = currentNode.nodeId;
-                costSoFar[i] = currentCost;
-            }
-        }
-    }
 }
 
 

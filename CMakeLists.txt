@@ -27,6 +27,9 @@ add_executable(Tanquitos src/main/main.cpp
         src/algorithms/Dijkstra.h
         src/algorithms/Astar.cpp
         src/algorithms/Astar.h
+        src/GameLogic/Tanque.cpp
+        src/GameLogic/Tanque.cpp
+        src/algorithms/BFSExplorador.h
 )
 target_compile_features(Tanquitos PRIVATE cxx_std_17)
 target_link_libraries(Tanquitos PRIVATE SFML::Graphics)

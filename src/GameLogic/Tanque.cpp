@@ -18,14 +18,6 @@ Tanque::Tanque(int id, int jugadorId, string color, int posicionInicial) {
     this->jugadorId=jugadorId;
 }
 
-
-
-
-
-
-
-
-
 //GETERS
 int Tanque::ObtenerPosicion() {
     return this->posicion;
