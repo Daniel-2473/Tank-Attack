@@ -1,7 +1,8 @@
 //
 // Created by yoelr on 10/5/2026.
 //
-
+#include <string>
+using namespace std;
 #ifndef TANQUITOS_TANQUE_H
 #define TANQUITOS_TANQUE_H
 
@@ -20,7 +21,11 @@ public:
     int ObtenerPosicion();
     string ObtenerColor();
     int ObtenerId();
-    float ObtenerVida();
+    int ObtenerVida();
+    bool EstaVivo();
+
+    void Mover(int nuevaposicion);
+    void bajarVida(int porcentaje);
 
 
 
