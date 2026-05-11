@@ -30,6 +30,8 @@ add_executable(Tanquitos src/main/main.cpp
         src/GameLogic/Tanque.cpp
         src/GameLogic/Tanque.cpp
         src/algorithms/BFSExplorador.h
+        src/GameLogic/Player.cpp
+        src/GameLogic/Player.h
 )
 target_compile_features(Tanquitos PRIVATE cxx_std_17)
 target_link_libraries(Tanquitos PRIVATE SFML::Graphics)
