@@ -4,9 +4,9 @@
 
 #ifndef TANQUITOS_JUEGO_H
 #define TANQUITOS_JUEGO_H
-#include <ctime>
 #include "Grafo.h"
 #include "Player.h"
+#include "Tanque.h"
 
 class Juego {
 private:
@@ -30,9 +30,11 @@ public:
     int ObtenerGanador();
     void MoverTanque(int tanque, int destinoId);
     bool HayTanqueEnPosicion(int posicionId);
-    void ProcesarMovimientoPendiente() ;
-
-
+    void ProcesarMovimientoPendiente();
+    int GetColumns();
+    int GetRows();
+    int IsWall(int nodeId);
+    Tanque* GetTank(int playerId, int tankId);
 };
 
 

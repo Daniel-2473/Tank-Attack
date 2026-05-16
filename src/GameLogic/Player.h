@@ -21,6 +21,7 @@ public:
     void AgregarPowerUp(int tipo);
     bool TienePowerUps();
     int SacarYAplicarPowerUp();
+
 private:
     const int TANKCOUNT = 4;
     int id;

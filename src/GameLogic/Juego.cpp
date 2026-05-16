@@ -8,7 +8,7 @@
 #include "Juego.h"
 #include <ctime>
 #include <iostream>
-
+#include "Tanque.h"
 Juego::Juego(Grafo &mapa, Player *player1, Player *player2) {
     this->mapa = &mapa;
     this->player1=player1;
@@ -41,7 +41,6 @@ void Juego::Actualizar() {
     }
 }
 
-
 void Juego::CambiarTurno() {
     if (this->turnoActual==1) {
         this->turnoActual=2;
@@ -50,7 +49,6 @@ void Juego::CambiarTurno() {
         this->turnoActual=1;
     }
 }
-
 
 int Juego::ObtenerTurnoActual() {
     return this->turnoActual;
@@ -76,7 +74,6 @@ int Juego::ObtenerGanador() {
         if (player1->GetTanksLeft()>player2->GetTanksLeft()) return 1;
         if (player2->GetTanksLeft()>player1->GetTanksLeft()) return 2;
         if (player1->GetTanksLeft()==player2->GetTanksLeft()) return 0;
-
     }
     return 0;
 }
@@ -89,7 +86,6 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
     Player* jugadorActual;
     if (turnoActual==1) {
         jugadorActual = player1;
-
     }
     if (turnoActual==2) {
         jugadorActual = player2;
@@ -133,18 +129,11 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
     if (route != nullptr && size > 0) {
         tanque->AsignarRuta(route,size);
         tanqueEnMovimiento=tanque;
-
-
     }
-
-
-
-
 }
 
 
 bool Juego::HayTanqueEnPosicion(int posicionId) {
-
     for (int i =0;i<4;i++) {
         Tanque* tanque1=player1->GetTank(i);
         if (tanque1 != nullptr && tanque1->EstaVivo()&&tanque1->ObtenerPosicion()==posicionId) {
@@ -159,7 +148,7 @@ bool Juego::HayTanqueEnPosicion(int posicionId) {
         }
     }
     return false;
-    }
+}
 
 void Juego::ProcesarMovimientoPendiente() {
     if (tanqueEnMovimiento != nullptr && tanqueEnMovimiento->TieneRutaPendiente()) {
@@ -172,3 +161,27 @@ void Juego::ProcesarMovimientoPendiente() {
         }
     }
 }
+
+int Juego::GetColumns() {
+    return  mapa->ObtenerColumnas();
+}
+
+int Juego::GetRows() {
+    return  mapa->ObtenerFilas();
+}
+
+int Juego::IsWall(int nodeId) {
+    return mapa->EsNodoPared(nodeId);
+}
+
+Tanque *Juego::GetTank(int playerId, int tankId) {
+    if (playerId ==1) {
+        return player1->GetTank(tankId);
+    } else {
+        return player2->GetTank(tankId);
+    }
+}
+
+
+
+
