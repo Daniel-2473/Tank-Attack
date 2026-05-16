@@ -14,6 +14,10 @@ private:
     int posicion;
     string color;
     int jugadorId;
+    //atributos para que el tanque vaya poco a poco
+    int* rutaPendiente;
+    int lengthRuta;
+    int pasoActual;
 
 
 public:
@@ -26,6 +30,12 @@ public:
 
     void Mover(int nuevaposicion);
     void bajarVida(int porcentaje);
+
+
+    void AsignarRuta(int* ruta, int tamaño);
+    bool TieneRutaPendiente();
+    void AvanzarUnPaso();
+    void LimpiarRuta();
 };
 
 

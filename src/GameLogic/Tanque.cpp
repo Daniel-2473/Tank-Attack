@@ -59,3 +59,32 @@ void Tanque::bajarVida(int porcentaje) {
 void Tanque::Mover(int nuevaposicion) {
     this->posicion=nuevaposicion;
 }
+
+
+void Tanque::AsignarRuta(int *ruta, int length) {
+    this->rutaPendiente=ruta;
+    this->lengthRuta=length;
+    this->pasoActual=1;
+}
+
+bool Tanque::TieneRutaPendiente() {
+    return rutaPendiente!= nullptr && pasoActual<lengthRuta;
+}
+
+void Tanque::LimpiarRuta() {
+    delete[] rutaPendiente;
+    rutaPendiente=nullptr;
+    lengthRuta=0;
+    pasoActual=0;
+}
+
+void Tanque::AvanzarUnPaso() {
+    if (TieneRutaPendiente()==true) {
+        int nuevaPosicion= rutaPendiente[pasoActual];
+        this->posicion=nuevaPosicion;
+        pasoActual++;
+    }
+    if (pasoActual>=lengthRuta) {
+        LimpiarRuta();
+    }
+}

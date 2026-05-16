@@ -7,20 +7,26 @@
 #include <string>
 using namespace std;
 #include "Tanque.h"
-
+#include <string>
+using namespace std;
+#include "Tanque.h"
+#include "../data_estructures/Queue.h"
 class Player {
 public:
     int GetId();
     int GetTanksLeft();
     Tanque* GetTank(int id);
-    Player(int id, Tanque* tank1, Tanque* tank2, string color);
+    Player(int id,Tanque* tank0, Tanque* tank1, Tanque* tank2,Tanque* tank3, string color);
     ~Player();
-
+    void AgregarPowerUp(int tipo);
+    bool TienePowerUps();
+    int SacarYAplicarPowerUp();
 private:
-    const int TANKCOUNT = 2;
+    const int TANKCOUNT = 4;
     int id;
     string color;
     Tanque** tanks;
+    Queue powerUps;
 };
 
 
