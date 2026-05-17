@@ -7,7 +7,7 @@
 
 
 int ContarNodosConCamino( int startId, Grafo& grafo) {
-    if (grafo.EsNodoPared(starId)==true) {
+    if (grafo.EsNodoPared(startId)==true) {
         return 0;
 
     }

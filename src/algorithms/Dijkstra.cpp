@@ -7,7 +7,7 @@
 #include "../data_estructures/PriorityQueue.h"
 #include "../data_estructures/Grafo.h"
 
-int* ReverseArray(int* arr, int used) { //Invierte un array el cual puede no estar lleno
+int* ReverseArrayDijsktra(int* arr, int used) { //Invierte un array el cual puede no estar lleno
     int* newArr = new int[used];
     int arrPos;
     for (int i = 0; i < used; i++) {
@@ -18,7 +18,7 @@ int* ReverseArray(int* arr, int used) { //Invierte un array el cual puede no est
     return newArr;
 }
 
-int *CreateRoute(int *parents, int lastNode, int graphSize, int& size) { //Recrear la ruta de nodos
+int *CreateRouteDijsktra(int *parents, int lastNode, int graphSize, int& size) { //Recrear la ruta de nodos
     int* route = new int[graphSize];
     int currentNode = lastNode;
     int count = 0;
@@ -28,10 +28,10 @@ int *CreateRoute(int *parents, int lastNode, int graphSize, int& size) { //Recre
         currentNode = parents[currentNode];
     }
     size = count;
-    return ReverseArray(route, count); //Necesitamos invetir la ruta, ya que va desde el nodo final al inicial
+    return ReverseArrayDijsktra(route, count); //Necesitamos invetir la ruta, ya que va desde el nodo final al inicial
 }
 
-void InsertNeighbors(PriorityQueue &queue, int graphSize, NodeCosts& currentNode, Grafo& grafo, int*& parents, int* costSoFar) {
+void InsertNeighborsDijsktra(PriorityQueue &queue, int graphSize, NodeCosts& currentNode, Grafo& grafo, int*& parents, int* costSoFar) {
     int currentCost;
     for (int i = 0; i < graphSize; i++) {
         if (grafo.EsVecino(currentNode.nodeId, i)) { //Recorrer los nodos del grafo y verificar cuales son vecinos de donde estamos posicionados
@@ -73,7 +73,7 @@ int* Dijsktra(int startId, int endId, Grafo& grafo, int& size) {
         if (endId == currentNode.nodeId) { //Si es el nodo final no recorremos los demas, ya hemos encontrado la ruta
             break;
         }
-        InsertNeighbors(queue, graphSize, currentNode, grafo, parents, costsSoFar); //Si no, seguimos visitando nodos
+        InsertNeighborsDijsktra(queue, graphSize, currentNode, grafo, parents, costsSoFar); //Si no, seguimos visitando nodos
     }
     if (!visited[endId]) { //Caso especial en el que no haya ruta posible (caso que no deberia ser posible)
         delete[] parents;
@@ -81,7 +81,7 @@ int* Dijsktra(int startId, int endId, Grafo& grafo, int& size) {
         delete[] costsSoFar;
         throw std::logic_error("No possible route");
     }
-    int* route = CreateRoute(parents, currentNode.nodeId, graphSize, size); //Creamos la ruta en un array de los ids de cada nodo
+    int* route = CreateRouteDijsktra(parents, currentNode.nodeId, graphSize, size); //Creamos la ruta en un array de los ids de cada nodo
     delete[] parents;
     delete[] visited;
     delete[] costsSoFar;

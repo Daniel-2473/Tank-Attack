@@ -7,7 +7,7 @@
 #include "../data_estructures/Grafo.h"
 
 
-int* ReverseArray(int* arr, int used) { //Invierte un array el cual puede no estar lleno
+int* ReverseArrayBFS(int* arr, int used) { //Invierte un array el cual puede no estar lleno
     int* newArr = new int[used];
     int arrPos;
     for (int i = 0; i < used; i++) {
@@ -18,7 +18,7 @@ int* ReverseArray(int* arr, int used) { //Invierte un array el cual puede no est
     return newArr;
 }
 
-int *CreateRoute(int *parents, int lastNode, int graphSize, int& size) { //Recrear la ruta de nodos
+int *CreateRouteBFS(int *parents, int lastNode, int graphSize, int& size) { //Recrear la ruta de nodos
     int* route = new int[graphSize];
     int currentNode = lastNode;
     int count = 0;
@@ -28,7 +28,7 @@ int *CreateRoute(int *parents, int lastNode, int graphSize, int& size) { //Recre
         currentNode = parents[currentNode];
     }
     size = count;
-    return ReverseArray(route, count); //Necesitamos invetir la ruta, ya que va desde el nodo final al inicial
+    return ReverseArrayBFS(route, count); //Necesitamos invetir la ruta, ya que va desde el nodo final al inicial
 }
 
 void InsertNeighbors(Queue &queue, int graphSize, int currentNode, Grafo& grafo, int*& parents, bool*& visited) {
@@ -71,7 +71,7 @@ int* BFS(int startId, int endId, Grafo& grafo, int& size) {
         delete[] visited;
         throw std::logic_error("No possible route");
     }
-    int* route = CreateRoute(parents, currentNode, graphSize, size); //Creamos la ruta en un array de los ids de cada nodo
+    int* route = CreateRouteBFS(parents, currentNode, graphSize, size); //Creamos la ruta en un array de los ids de cada nodo
     delete[] parents;
     delete[] visited;
     return route;

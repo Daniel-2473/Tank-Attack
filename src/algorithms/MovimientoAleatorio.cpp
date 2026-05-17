@@ -43,5 +43,5 @@ int *MovimientoAleatorio(int startId, Grafo &grafo, int &size) {
     size = 1;
     return ruta;
 }
-    }
+
 
