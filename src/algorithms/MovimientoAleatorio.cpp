@@ -5,6 +5,7 @@
 #include "MovimientoAleatorio.h"
 #include <cstdlib>
 #include <cmath>
+#include "LineaVista.h"
 
 
 int *MovimientoAleatorio(int startId, Grafo &grafo, int &size) {
