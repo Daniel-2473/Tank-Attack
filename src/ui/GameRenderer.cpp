@@ -32,6 +32,9 @@ GameRenderer::GameRenderer(Juego* juego, int columns, int rows)
     if (!tankTextures[3].loadFromFile("../assets/Tanks/Amarillo.png")) {
         throw std::runtime_error("Could not load wall texture");
     }
+    if (!font.openFromFile("../assets/font.ttf")) {
+        throw std::runtime_error("Could not load font");
+    }
 }
 
 void GameRenderer::Run() {
@@ -49,6 +52,7 @@ void GameRenderer::Draw() {
     DrawGrid();
     DrawWalls();
     DrawTanks();
+    DrawHUD();
 
     window.display();
 }
@@ -162,6 +166,77 @@ void GameRenderer::HandleEvents() {
                 }
             }
         }
+    }
+}
+
+void GameRenderer::DrawHUD() {
+    int hudY = CELL_SIZE * rows; // empieza justo debajo del mapa
+    int turno = juego->ObtenerTurnoActual();
+
+    // Fondo del HUD
+    sf::RectangleShape hudBackground;
+    hudBackground.setSize({static_cast<float>(CELL_SIZE * columns), 50.f});
+    hudBackground.setPosition({0.f, static_cast<float>(hudY)});
+    hudBackground.setFillColor(sf::Color(30, 30, 30));
+    window.draw(hudBackground);
+
+    // Texto de turno
+    sf::Text turnoText(font);
+    turnoText.setCharacterSize(16);
+    turnoText.setFillColor(turno == 1 ? sf::Color(255, 100, 100) : sf::Color(100, 200, 255));
+    turnoText.setString("Turno: Jugador " + to_string(turno));
+    turnoText.setPosition({10.f, static_cast<float>(hudY + 15)});
+    window.draw(turnoText);
+
+    // Vidas jugador 1
+    // Colores del jugador 1: rojo (índice 2) y azul (índice 0)
+    int offsetX = 200; // empezar después del texto de turno
+    for (int j = 1; j <= 4; j++) {
+        Tanque* tank = juego->GetTank(1, j);
+        if (tank == nullptr) continue;
+
+        // Mini sprite del tanque
+        sf::Sprite miniSprite(SelectColor(tank->ObtenerColor()));
+        miniSprite.setScale({0.5f, 0.5f});
+        miniSprite.setPosition({static_cast<float>(offsetX), static_cast<float>(hudY + 10)});
+        if (!tank->EstaVivo()) {
+            miniSprite.setColor(sf::Color(100, 100, 100, 150)); // gris si está muerto
+        }
+        window.draw(miniSprite);
+
+        // Número de vida al lado
+        sf::Text vidaText(font);
+        vidaText.setCharacterSize(14);
+        vidaText.setFillColor(sf::Color::White);
+        vidaText.setString(to_string(tank->ObtenerVida()) + "%");
+        vidaText.setPosition({static_cast<float>(offsetX + 18), static_cast<float>(hudY + 16)});
+        window.draw(vidaText);
+
+        offsetX += 60; // espacio entre cada tanque
+    }
+
+    // Vidas jugador 2 (lado derecho)
+    offsetX = CELL_SIZE * columns - 260;
+    for (int j = 1; j <= 4; j++) {
+        Tanque* tank = juego->GetTank(2, j);
+        if (tank == nullptr) continue;
+
+        sf::Sprite miniSprite(SelectColor(tank->ObtenerColor()));
+        miniSprite.setScale({0.5f, 0.5f});
+        miniSprite.setPosition({static_cast<float>(offsetX), static_cast<float>(hudY + 10)});
+        if (!tank->EstaVivo()) {
+            miniSprite.setColor(sf::Color(100, 100, 100, 150));
+        }
+        window.draw(miniSprite);
+
+        sf::Text vidaText(font);
+        vidaText.setCharacterSize(14);
+        vidaText.setFillColor(sf::Color::White);
+        vidaText.setString(to_string(tank->ObtenerVida()) + "%");
+        vidaText.setPosition({static_cast<float>(offsetX + 18), static_cast<float>(hudY + 16)});
+        window.draw(vidaText);
+
+        offsetX += 60;
     }
 }
 

@@ -20,6 +20,7 @@ private:
     void DrawGrid();
     void DrawWalls();
     void DrawTanks();
+    void DrawHUD();
 
     int ScreenToNodeId(int mouseX, int mouseY);
 
@@ -32,6 +33,8 @@ private:
     sf::RectangleShape background;
 
     sf::Clock movementClock;
+
+    sf::Font font;
 
     int columns;
     int rows;
