@@ -3,7 +3,7 @@
 //
 
 #include "Grafo.h"
-
+#include <random>
 
 /*
  *atributos del grafo
@@ -156,4 +156,15 @@ int Grafo::CalculateHeuristic(int currentId, int endId) {
 
     int h = abs(x1 - x2) + abs(y1 - y2);
     return h;
+}
+
+int Grafo::RandomPos() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, columnas*filas);
+    int pos = dist(gen);
+    while (EsNodoPared(pos)) {
+        pos = dist(gen);
+    }
+    return pos;
 }

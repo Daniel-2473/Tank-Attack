@@ -9,7 +9,7 @@
 
 class GameRenderer {
 public:
-    GameRenderer(Juego* juego);
+    GameRenderer(Juego* juego, int columns, int rows);
     void Run();
 
 private:

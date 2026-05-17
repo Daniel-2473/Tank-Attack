@@ -6,9 +6,11 @@
 
 const int CELL_SIZE = 32;
 
-GameRenderer::GameRenderer(Juego* juego)
-: window(sf::VideoMode(sf::Vector2u(CELL_SIZE * columns, CELL_SIZE * rows + 100)),"Tank Attack")
+GameRenderer::GameRenderer(Juego* juego, int columns, int rows)
+: window(sf::VideoMode(sf::Vector2u(CELL_SIZE * columns, CELL_SIZE * rows + 50)),"Tank Attack")
 {
+    this->rows = rows;
+    this->columns = columns;
     this->juego = juego;
     this->background.setSize({static_cast<float>(CELL_SIZE*columns), static_cast<float>(CELL_SIZE*rows)});
     this->background.setFillColor(sf::Color::Green);
@@ -77,8 +79,8 @@ void GameRenderer::DrawTanks() {
     Tanque* tank;
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 4; j++) {
-            tank = juego->GetTank(i,j+1);
-            if (tank->EstaVivo()) {
+            tank = juego->GetTank(i+1,j+1);
+            if (tank != nullptr && tank->EstaVivo()) {
                 sf::Sprite tankSprite(SelectColor(tank->ObtenerColor()));
 
                 float x = static_cast<float>(CELL_SIZE * (tank->ObtenerPosicion() % columns));
@@ -113,7 +115,7 @@ void GameRenderer::Update() {
 int GameRenderer::ScreenToNodeId(int mouseX, int mouseY) {
     int column = mouseX/CELL_SIZE;
     int row = mouseY/CELL_SIZE;
-    return row*column+column;
+    return row * columns + column;
 }
 
 void GameRenderer::HandleEvents() {

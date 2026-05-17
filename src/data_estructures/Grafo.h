@@ -31,6 +31,7 @@ public:
     int ObtenerFilas();
     int ObtenerColumnas();
     int CalculateHeuristic(int currentId, int endId);
+    int RandomPos();
 
 };
 

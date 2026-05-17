@@ -39,6 +39,7 @@ void Juego::Actualizar() {
     if (player1->GetTanksLeft()==0||player2->GetTanksLeft()==0||TiempoTerminado()==true) {
         this->juegoActivo=false;
     }
+    ProcesarMovimientoPendiente();
 }
 
 void Juego::CambiarTurno() {

@@ -48,8 +48,6 @@ void GeneradorDeMapa::LimpiarMapa(Grafo& grafo) {
     }
 
     }
-
-
 }
 
 
@@ -82,8 +80,6 @@ void GeneradorDeMapa::Generar(Grafo &grafo) {
         }
 
     }
-
-
 }
 
 
