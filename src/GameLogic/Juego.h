@@ -21,6 +21,7 @@ private:
     Tanque* tanqueEnMovimiento;
     sf::Clock stepClock;
     float stepInterval = 0.3f;
+    void ImprimirRuta(int* route, int size);
 
 public:
     Juego(Grafo& mapa, Player* player1, Player* player2);

@@ -85,6 +85,7 @@ void Tanque::AvanzarUnPaso() {
     if (TieneRutaPendiente()==true) {
         int nuevaPosicion= rutaPendiente[pasoActual];
         this->posicion=nuevaPosicion;
+        cout << "Nueva posicion: " + to_string(posicion) << endl;
         pasoActual++;
     }
     if (pasoActual>=lengthRuta) {

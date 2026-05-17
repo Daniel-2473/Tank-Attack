@@ -141,6 +141,7 @@ void GameRenderer::HandleEvents() {
                 int posId = ScreenToNodeId(mouseX, mouseY);
                 if (selectedTank != nullptr) {
                     if (!juego->HayTanqueEnPosicion(posId)) {
+                        cout<<"Moviendo tanque de: " + to_string(selectedTank->ObtenerPosicion()) + to_string(posId)<<endl;
                         juego->MoverTanque(selectedTank->ObtenerId(), posId);
                         selectedTank = nullptr;
                     }
@@ -150,6 +151,8 @@ void GameRenderer::HandleEvents() {
                     tankAux = juego->TanquePerteneceAJugador(posId, juego->ObtenerTurnoActual());
                     if (tankAux != nullptr) {
                         selectedTank = tankAux;
+                        cout<<"Tanque seleccionado:" + tankAux->ObtenerColor() <<endl;
+                        tankAux = nullptr;
                     }
                 }
             }

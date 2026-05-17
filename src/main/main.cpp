@@ -6,8 +6,8 @@
 #include "../GameLogic/GeneradorDeMapa.h"
 #include "../data_estructures/Grafo.h"
 
-const int COLUMNS = 40;
-const int ROWS = 24;
+const int COLUMNS = 20;
+const int ROWS = 12;
 
 void GenerateTanksPos(Grafo& grafo, int* posArr) {
     for (int i = 0; i < 8; i++) {
@@ -29,7 +29,7 @@ void GenerateTanksPos(Grafo& grafo, int* posArr) {
 }
 
 int main(){
-    Grafo* grafo = new Grafo(COLUMNS, ROWS);
+    Grafo* grafo = new Grafo(ROWS, COLUMNS);
     GeneradorDeMapa generador;
     generador.Generar(*grafo);
     int* posArr = new int[8];

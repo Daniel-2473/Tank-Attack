@@ -83,17 +83,21 @@ int Juego::ObtenerGanador() {
 
 
 void Juego::MoverTanque(int tanqueId, int destinoId) {
+    cout<<"Funcion mover tanque"<<endl;
     if (juegoActivo==false) {
         return;
     }
     Player* jugadorActual;
     if (turnoActual==1) {
         jugadorActual = player1;
+        cout<<"Moviendo tanque del jugador 1"<<endl;
     }
     if (turnoActual==2) {
         jugadorActual = player2;
+        cout<<"Moviendo tanque del jugador 2"<<endl;
     }
-    Tanque* tanque =  jugadorActual->GetTank(tanqueId);
+    Tanque* tanque = jugadorActual->GetTank(tanqueId);
+    cout<<"Tanque: " + tanque->ObtenerColor() + to_string(tanqueId)<<endl;
     if (tanque == nullptr) {
         return;
     }
@@ -101,12 +105,15 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
         return;
     }
     if (mapa->EsNodoPared(destinoId)) {
+        cout<<"La posicion seleccionada es invalida"<<endl;
         return;
     }
     if (HayTanqueEnPosicion(destinoId)) {
+        cout<<"La posicion seleccionada es invalida"<<endl;
         return;  // No se puede mover a una casilla ocupada
     }
     int posicionIinicial= tanque->ObtenerPosicion();
+    cout<<"Posicion inicial:" + to_string(posicionIinicial)<<endl;
     string color=tanque->ObtenerColor();
     int* route = nullptr;
     int size=0;
@@ -114,24 +121,31 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
         //50 de bfs 50 de random
         int probabilidad = rand() %100;
         if (probabilidad<50) {
+            cout<<"Ejecutando BFS"<<endl;
             route= BFS(posicionIinicial,destinoId,*mapa,size);
         }
         else {
+            cout<<"Ejecutando movimiento aleatorio (azul/celeste)"<<endl;
             route=MovimientoAleatorio(posicionIinicial,*mapa,size);
         }
     }
     if (color=="rojo"||color=="amarillo") {
         int probabilidad = rand()%100;
         if (probabilidad<80) {
+            cout<<"Ejecutando Dijsktra"<<endl;
             route=Dijsktra(posicionIinicial,destinoId,*mapa,size);
         }
         else {
+            cout<<"Ejecutando movimiento aleatorio (rojo/amarillo)"<<endl;
             route=MovimientoAleatorio(posicionIinicial,*mapa,size);
         }
     }
     if (route != nullptr && size > 0) {
+        ImprimirRuta(route, size);
+        cout<<"Asignando ruta al tanque"<<endl;
         tanque->AsignarRuta(route,size);
         tanqueEnMovimiento=tanque;
+        cout << "Moviendo tanque en pantalla" << endl;
     }
 }
 
@@ -151,6 +165,7 @@ bool Juego::HayTanqueEnPosicion(int posicionId) {
 }
 
 void Juego::ProcesarMovimientoPendiente() {
+
     if (tanqueEnMovimiento != nullptr && tanqueEnMovimiento->TieneRutaPendiente()) {
         if (stepClock.getElapsedTime().asSeconds() >= stepInterval) {
             tanqueEnMovimiento->AvanzarUnPaso();
@@ -201,6 +216,14 @@ Tanque* Juego::TanquePerteneceAJugador(int tankPos, int playerId) {
     return nullptr;
 }
 
-
-
+void Juego::ImprimirRuta(int* route, int size) {
+    cout << "Ruta calculada (" << size << " pasos): ";
+    for (int i = 0; i < size; i++) {
+        int col = route[i] % mapa->ObtenerColumnas();
+        int row = route[i] / mapa->ObtenerColumnas();
+        cout << "[" << route[i] << " (" << col << "," << row << ")]";
+        if (i < size - 1) cout << " -> ";
+    }
+    cout << endl;
+}
 
