@@ -31,6 +31,8 @@ private:
 
     sf::RectangleShape background;
 
+    sf::Clock movementClock;
+
     int columns;
     int rows;
 

@@ -9,6 +9,9 @@
 #include <ctime>
 #include <iostream>
 #include "Tanque.h"
+#include <SFML/System/Clock.hpp>
+#include <SFML/System/Time.hpp>
+
 Juego::Juego(Grafo &mapa, Player *player1, Player *player2) {
     this->mapa = &mapa;
     this->player1=player1;
@@ -39,7 +42,6 @@ void Juego::Actualizar() {
     if (player1->GetTanksLeft()==0||player2->GetTanksLeft()==0||TiempoTerminado()==true) {
         this->juegoActivo=false;
     }
-    ProcesarMovimientoPendiente();
 }
 
 void Juego::CambiarTurno() {
@@ -135,30 +137,29 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
 
 
 bool Juego::HayTanqueEnPosicion(int posicionId) {
-    for (int i =0;i<4;i++) {
-        Tanque* tanque1=player1->GetTank(i);
-        if (tanque1 != nullptr && tanque1->EstaVivo()&&tanque1->ObtenerPosicion()==posicionId) {
+    for (int i = 1; i <= 4; i++) { // ← de 1 a 4
+        Tanque* tanque1 = player1->GetTank(i);
+        if (tanque1 != nullptr && tanque1->EstaVivo() && tanque1->ObtenerPosicion() == posicionId)
             return true;
-        }
     }
-
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1; i <= 4; i++) { // ← de 1 a 4
         Tanque* tanque2 = player2->GetTank(i);
-        if (tanque2 != nullptr && tanque2->EstaVivo() && tanque2->ObtenerPosicion() == posicionId) {
+        if (tanque2 != nullptr && tanque2->EstaVivo() && tanque2->ObtenerPosicion() == posicionId)
             return true;
-        }
     }
     return false;
 }
 
 void Juego::ProcesarMovimientoPendiente() {
     if (tanqueEnMovimiento != nullptr && tanqueEnMovimiento->TieneRutaPendiente()) {
-        tanqueEnMovimiento->AvanzarUnPaso();
+        if (stepClock.getElapsedTime().asSeconds() >= stepInterval) {
+            tanqueEnMovimiento->AvanzarUnPaso();
+            stepClock.restart();
 
-        // Si ya no tiene ruta, llegó al destino
-        if (!tanqueEnMovimiento->TieneRutaPendiente()) {
-            tanqueEnMovimiento = nullptr;
-            CambiarTurno();  // solo cambia turno cuando termina
+            if (!tanqueEnMovimiento->TieneRutaPendiente()) {
+                tanqueEnMovimiento = nullptr;
+                CambiarTurno();
+            }
         }
     }
 }
@@ -193,7 +194,7 @@ Tanque* Juego::TanquePerteneceAJugador(int tankPos, int playerId) {
     } else {
         for (int i = 1; i < 5; i++) {
             if (tankPos == player2->GetTank(i)->ObtenerPosicion()) {
-                return player1->GetTank(i);
+                return player2->GetTank(i);
             }
         }
     }

@@ -11,11 +11,14 @@ using namespace std;
 
 
 Tanque::Tanque(int id, int jugadorId, string color, int posicionInicial) {
-    this->id=id; //1 - 4
-    this->posicion=posicionInicial;
-    this->vida=100;
-    this->color=color;
-    this->jugadorId=jugadorId;
+    this->id = id;
+    this->posicion = posicionInicial;
+    this->vida = 100;
+    this->color = color;
+    this->jugadorId = jugadorId;
+    this->rutaPendiente = nullptr; // ← agregar estos tres
+    this->lengthRuta = 0;
+    this->pasoActual = 0;
 }
 
 //GETERS

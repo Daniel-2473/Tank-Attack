@@ -7,10 +7,10 @@
 #ifndef TANQUITOS_MOVIMIENTOALEATORIO_H
 #define TANQUITOS_MOVIMIENTOALEATORIO_H
 
-const int MAX_INTENTOS = 50;
+const int MAX_INTENTOS = 2;
 const int RADIO_MOVIMIENTO = 3;
 
-    int* MovimientoAleatorio(int startId, Grafo& grafo, int& size);
+int* MovimientoAleatorio(int startId, Grafo& grafo, int& size);
 
 
 

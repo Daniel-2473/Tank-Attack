@@ -7,6 +7,7 @@
 #include "../data_estructures/Grafo.h"
 #include "Player.h"
 #include "Tanque.h"
+#include <SFML/System/Clock.hpp>
 
 class Juego {
 private:
@@ -18,6 +19,8 @@ private:
     bool juegoActivo;
     const int DURACIONMAXIMA = 300;
     Tanque* tanqueEnMovimiento;
+    sf::Clock stepClock;
+    float stepInterval = 0.3f;
 
 public:
     Juego(Grafo& mapa, Player* player1, Player* player2);

@@ -108,7 +108,10 @@ sf::Texture& GameRenderer::SelectColor(const string& color) {
 }
 
 void GameRenderer::Update() {
-    juego->ProcesarMovimientoPendiente();
+    if (movementClock.getElapsedTime().asSeconds() >= 1.f) {
+        juego->ProcesarMovimientoPendiente();
+        movementClock.restart();
+    }
     juego->Actualizar();
 }
 
