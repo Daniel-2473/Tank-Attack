@@ -47,7 +47,6 @@ Player::~Player() {
     delete[] tanks;
 }
 
-
 void Player::AgregarPowerUp(int tipo) {
     this->powerUps.Insert(tipo);
 }
@@ -60,7 +59,6 @@ bool Player::TienePowerUps() {
         return true;
     }
 }
-
 
 int Player::SacarYAplicarPowerUp() {
     if (TienePowerUps()==true){

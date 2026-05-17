@@ -182,6 +182,23 @@ Tanque *Juego::GetTank(int playerId, int tankId) {
     }
 }
 
+Tanque* Juego::TanquePerteneceAJugador(int tankPos, int playerId) {
+    if (playerId == 1) {
+        for (int i = 1; i < 5; i++) {
+            if (tankPos == player1->GetTank(i)->ObtenerPosicion()) {
+                return player1->GetTank(i);
+            }
+        }
+    } else {
+        for (int i = 1; i < 5; i++) {
+            if (tankPos == player2->GetTank(i)->ObtenerPosicion()) {
+                return player1->GetTank(i);
+            }
+        }
+    }
+    return nullptr;
+}
+
 
 
 

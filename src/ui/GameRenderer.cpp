@@ -7,12 +7,29 @@
 const int CELL_SIZE = 32;
 
 GameRenderer::GameRenderer(Juego* juego)
-: window(sf::VideoMode(sf::Vector2u(CELL_SIZE * columns, CELL_SIZE * rows)),"Tank Attack")
+: window(sf::VideoMode(sf::Vector2u(CELL_SIZE * columns, CELL_SIZE * rows + 100)),"Tank Attack")
 {
     this->juego = juego;
     this->background.setSize({static_cast<float>(CELL_SIZE*columns), static_cast<float>(CELL_SIZE*rows)});
     this->background.setFillColor(sf::Color::Green);
     this->background.setPosition({0.f, 0.f});
+    this->selectedTank = nullptr;
+    if (!wallTexture.loadFromFile("../assets/Map/Wall1.png")) {
+        throw std::runtime_error("Could not load wall texture");
+    }
+    this->tankTextures = new sf::Texture[4];
+    if (!tankTextures[0].loadFromFile("../assets/Tanks/Azul.png")) {
+        throw std::runtime_error("Could not load wall texture");
+    }
+    if (!tankTextures[1].loadFromFile("../assets/Tanks/Celeste.png")) {
+        throw std::runtime_error("Could not load wall texture");
+    }
+    if (!tankTextures[2].loadFromFile("../assets/Tanks/Rojo.png")) {
+        throw std::runtime_error("Could not load wall texture");
+    }
+    if (!tankTextures[3].loadFromFile("../assets/Tanks/Amarillo.png")) {
+        throw std::runtime_error("Could not load wall texture");
+    }
 }
 
 void GameRenderer::Run() {
@@ -59,8 +76,8 @@ void GameRenderer::DrawWalls() {
 void GameRenderer::DrawTanks() {
     Tanque* tank;
     for (int i = 0; i < 2; i++) {
-        for (int j = 0; j < 2; j++) {
-            tank = juego->GetTank(i,j);
+        for (int j = 0; j < 4; j++) {
+            tank = juego->GetTank(i,j+1);
             if (tank->EstaVivo()) {
                 sf::Sprite tankSprite(SelectColor(tank->ObtenerColor()));
 
@@ -76,13 +93,13 @@ void GameRenderer::DrawTanks() {
 }
 
 sf::Texture& GameRenderer::SelectColor(const string& color) {
-    if (color == "red") {
+    if (color == "azul") {
         return tankTextures[0];
     }
-    if (color == "blue") {
+    if (color == "celeste") {
         return tankTextures[1];
     }
-    if (color == "cyan") {
+    if (color == "rojo") {
         return tankTextures[2];
     }
     return tankTextures[3];
@@ -91,6 +108,53 @@ sf::Texture& GameRenderer::SelectColor(const string& color) {
 void GameRenderer::Update() {
     juego->ProcesarMovimientoPendiente();
     juego->Actualizar();
+}
+
+int GameRenderer::ScreenToNodeId(int mouseX, int mouseY) {
+    int column = mouseX/CELL_SIZE;
+    int row = mouseY/CELL_SIZE;
+    return row*column+column;
+}
+
+void GameRenderer::HandleEvents() {
+    Tanque* tankAux = nullptr;
+    while (const std::optional event = window.pollEvent()) {
+        if (event->is<sf::Event::KeyPressed>()) {
+            auto key = event->getIf<sf::Event::KeyPressed>();
+            if (key->code == sf::Keyboard::Key::Escape) {
+                window.close();
+            }
+            if (key->code == sf::Keyboard::Key::LShift) {
+                //Usar power up
+            }
+        }
+        if (event->is<sf::Event::MouseButtonPressed>()) {
+            auto mouse = event->getIf<sf::Event::MouseButtonPressed>();
+            if (mouse->button == sf::Mouse::Button::Left) {
+                int mouseX = mouse->position.x;
+                int mouseY = mouse->position.y;
+                int posId = ScreenToNodeId(mouseX, mouseY);
+                if (selectedTank != nullptr) {
+                    if (!juego->HayTanqueEnPosicion(posId)) {
+                        juego->MoverTanque(selectedTank->ObtenerId(), posId);
+                        selectedTank = nullptr;
+                    }
+                }
+                else if (juego->HayTanqueEnPosicion(posId)) {
+                    //Verificar si el tanque le pertenece al jugador que corresponde
+                    tankAux = juego->TanquePerteneceAJugador(posId, juego->ObtenerTurnoActual());
+                    if (tankAux != nullptr) {
+                        selectedTank = tankAux;
+                    }
+                }
+            }
+            else if (mouse->button == sf::Mouse::Button::Right) {
+                if (selectedTank != nullptr) {
+                    //Disparar
+                }
+            }
+        }
+    }
 }
 
 

@@ -11,7 +11,7 @@ using namespace std;
 
 
 Tanque::Tanque(int id, int jugadorId, string color, int posicionInicial) {
-    this->id=id;
+    this->id=id; //1 - 4
     this->posicion=posicionInicial;
     this->vida=100;
     this->color=color;

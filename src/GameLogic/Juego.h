@@ -4,7 +4,7 @@
 
 #ifndef TANQUITOS_JUEGO_H
 #define TANQUITOS_JUEGO_H
-#include "Grafo.h"
+#include "../data_estructures/Grafo.h"
 #include "Player.h"
 #include "Tanque.h"
 
@@ -35,6 +35,7 @@ public:
     int GetRows();
     int IsWall(int nodeId);
     Tanque* GetTank(int playerId, int tankId);
+    Tanque* TanquePerteneceAJugador(int tankPos, int playerId);
 };
 
 

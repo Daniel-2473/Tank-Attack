@@ -28,12 +28,13 @@ private:
 
     sf::Texture wallTexture;
     sf::Texture* tankTextures;
-    sf::Sprite* tankSprites;
 
     sf::RectangleShape background;
 
     int columns;
     int rows;
+
+    Tanque* selectedTank;
 
     sf::Texture& SelectColor(const string& color);
 };
