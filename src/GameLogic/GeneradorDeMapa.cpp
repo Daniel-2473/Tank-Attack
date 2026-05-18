@@ -23,6 +23,7 @@ bool GeneradorDeMapa::EsNodoUsable(int id, Grafo& grafo) {
 
 
 void GeneradorDeMapa::ColocarParedesAleatorias(Grafo& grafo) {
+    srand(time(NULL));
     int filas= grafo.ObtenerFilas();
     int columnas = grafo.ObtenerColumnas();
     int totalNodos= filas*columnas;
