@@ -21,6 +21,11 @@ private:
     void DrawWalls();
     void DrawTanks();
     void DrawHUD();
+    void DrawTurnText(int hudY);
+    void DrawTimeText(int hudY);
+    void DrawPlayerHUD(int playerId, int startX, int hudY);
+    void DrawTankHUD(Tanque* tank, int x, int y);
+    void DrawHUDBackground(int hudY);
 
     int ScreenToNodeId(int mouseX, int mouseY);
 

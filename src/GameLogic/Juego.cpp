@@ -21,6 +21,15 @@ Juego::Juego(Grafo &mapa, Player *player1, Player *player2) {
     this->tanqueEnMovimiento=nullptr;
     this->balaEnMovimiento=nullptr;
     this->tiempo = 0;
+    this->doubleTurn = false;
+    this->doubleTurnCount = 0;
+    this->doubleTurnPlayer = 0;
+    this->applyPrecise = false;
+    this->player1Precise = false;
+    this->player2Precise = false;
+    sf::Clock powerUpClock;
+    float powerUpInterval = 30.f;
+    void GenerarPowerUp();
 }
 
 void Juego::Iniciar() {
@@ -28,6 +37,12 @@ void Juego::Iniciar() {
     this->tiempo = time(NULL);
 }
 
+int Juego::ObtenerTiempoRestante() {
+    time_t ahoraMismo = time(NULL);
+    int tiempoTranscurrido = ahoraMismo - this->tiempo;
+
+    return DURACIONMAXIMA - tiempoTranscurrido;
+}
 
 bool Juego::TiempoTerminado() {
     time_t ahoraMismo = time(NULL);
@@ -44,24 +59,39 @@ void Juego::Actualizar() {
     if (player1->GetTanksLeft()==0||player2->GetTanksLeft()==0||TiempoTerminado()==true) {
         this->juegoActivo=false;
     }
+    if (powerUpClock.getElapsedTime().asSeconds() >= powerUpInterval) {
+        GenerarPowerUp();
+        powerUpClock.restart();
+    }
 
 
 
 }
 
 void Juego::CambiarTurno() {
-    if (this->turnoActual==1) {
-        this->turnoActual=2;
+    if (doubleTurnCount > 0 && turnoActual == doubleTurnPlayer) {
+        doubleTurnCount--;
+    } else {
+        turnoActual = (turnoActual == 1) ? 2 : 1;
     }
-    else {
-        this->turnoActual=1;
+    if (applyPrecise) {
+        if (turnoActual == 1) {
+            player1Precise = true;
+        } else {
+            player2Precise = true;
+        }
+        applyPrecise = false;
     }
+}
+
+void Juego::AplicarDoubleTurn(int playerId) {
+    doubleTurnPlayer = playerId;
+    doubleTurnCount = 2;
 }
 
 int Juego::ObtenerTurnoActual() {
     return this->turnoActual;
 }
-
 
 bool Juego::JuegoTerminado() {
     if (this->juegoActivo==true) {
@@ -122,10 +152,24 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
     string color=tanque->ObtenerColor();
     int* route = nullptr;
     int size=0;
+    int probabilidadPorc;
+    if (color == "azul" || color == "celeste") {
+        probabilidadPorc = 50;
+    }
+    else {
+        probabilidadPorc = 80;
+    }
+    if (player1Precise && turnoActual == 1) {
+        probabilidadPorc = 90;
+        player1Precise = false;
+    } else if (player2Precise && turnoActual == 2) {
+        probabilidadPorc = 90;
+        player2Precise = false;
+    }
     if (color=="azul" || color == "celeste") {
         //50 de bfs 50 de random
         int probabilidad = rand() %100;
-        if (probabilidad<50) {
+        if (probabilidad<probabilidadPorc) {
             cout<<"Ejecutando BFS"<<endl;
             route= BFS(posicionIinicial,destinoId,*mapa,size);
         }
@@ -136,7 +180,7 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
     }
     if (color=="rojo"||color=="amarillo") {
         int probabilidad = rand()%100;
-        if (probabilidad<80) {
+        if (probabilidad < probabilidadPorc) {
             cout<<"Ejecutando Dijsktra"<<endl;
             route=Dijsktra(posicionIinicial,destinoId,*mapa,size);
         }
@@ -156,12 +200,12 @@ void Juego::MoverTanque(int tanqueId, int destinoId) {
 
 
 bool Juego::HayTanqueEnPosicion(int posicionId) {
-    for (int i = 1; i <= 4; i++) { // ← de 1 a 4
+    for (int i = 1; i <= 4; i++) {
         Tanque* tanque1 = player1->GetTank(i);
         if (tanque1 != nullptr && tanque1->EstaVivo() && tanque1->ObtenerPosicion() == posicionId)
             return true;
     }
-    for (int i = 1; i <= 4; i++) { // ← de 1 a 4
+    for (int i = 1; i <= 4; i++) {
         Tanque* tanque2 = player2->GetTank(i);
         if (tanque2 != nullptr && tanque2->EstaVivo() && tanque2->ObtenerPosicion() == posicionId)
             return true;
@@ -231,6 +275,37 @@ void Juego::ImprimirRuta(int* route, int size) {
     }
     cout << endl;
 }
+
+void Juego::ApplyPrecise() {
+    applyPrecise = true;
+}
+
+void Juego::UsePowerUp() {
+    int powerUpId;
+    if (turnoActual == 1) {
+        powerUpId = player1->SacarYAplicarPowerUp();
+    }
+    else {
+        powerUpId = player2->SacarYAplicarPowerUp();
+    }
+    if (powerUpId == 1) {
+        AplicarDoubleTurn(turnoActual);
+    }
+    else if (powerUpId == 2) {
+        ApplyPrecise();
+    }
+}
+
+void Juego::GenerarPowerUp() {
+    int tipo = (rand() % 4) + 1;
+    int jugador = (rand() % 2) + 1;
+    if (jugador == 1) {
+        player1->AgregarPowerUp(tipo);
+    } else {
+        player2->AgregarPowerUp(tipo);
+    }
+}
+
 
 
 void Juego::DispararTanque(int tanqueId, int destinoId) {

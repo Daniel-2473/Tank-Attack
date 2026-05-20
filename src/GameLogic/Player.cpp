@@ -17,8 +17,6 @@ Player::Player(int id,Tanque* tank0, Tanque* tank1, Tanque* tank2,Tanque* tank3)
     tanks[1] = tank1;
     tanks[2] = tank2;
     tanks[3] = tank3;
-
-
 }
 
 int Player::GetId() {
