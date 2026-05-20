@@ -6,8 +6,8 @@
 #include "../GameLogic/GeneradorDeMapa.h"
 #include "../data_estructures/Grafo.h"
 
-const int COLUMNS = 50;
-const int ROWS = 25;
+const int COLUMNS = 30;
+const int ROWS = 15;
 
 void GenerateTanksPos(Grafo& grafo, int* posArr) {
     for (int i = 0; i < 8; i++) {

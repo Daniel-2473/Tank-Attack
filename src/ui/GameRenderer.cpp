@@ -72,7 +72,6 @@ void GameRenderer::DrawWalls() {
                     j * 32.f,
                     i* 32.f
                 });
-
                 window.draw(tile);
             }
         }
@@ -170,74 +169,163 @@ void GameRenderer::HandleEvents() {
 }
 
 void GameRenderer::DrawHUD() {
-    int hudY = CELL_SIZE * rows; // empieza justo debajo del mapa
+    int hudY = CELL_SIZE * rows;
+
+    DrawHUDBackground(hudY);
+
+    DrawTurnText(hudY);
+
+    DrawTimeText(hudY);
+
+    DrawPlayerHUD(1, 200, hudY);
+
+    DrawPlayerHUD(2, CELL_SIZE * columns - 260, hudY);
+}
+
+void GameRenderer::DrawHUDBackground(int hudY) {
+    sf::RectangleShape hudBackground;
+
+    hudBackground.setSize({
+        static_cast<float>(CELL_SIZE * columns),
+        50.f
+    });
+
+    hudBackground.setPosition({
+        0.f,
+        static_cast<float>(hudY)
+    });
+
+    hudBackground.setFillColor(sf::Color(30, 30, 30));
+
+    window.draw(hudBackground);
+}
+
+void GameRenderer::DrawTurnText(int hudY) {
+
     int turno = juego->ObtenerTurnoActual();
 
-    // Fondo del HUD
-    sf::RectangleShape hudBackground;
-    hudBackground.setSize({static_cast<float>(CELL_SIZE * columns), 50.f});
-    hudBackground.setPosition({0.f, static_cast<float>(hudY)});
-    hudBackground.setFillColor(sf::Color(30, 30, 30));
-    window.draw(hudBackground);
-
-    // Texto de turno
     sf::Text turnoText(font);
+
     turnoText.setCharacterSize(16);
-    turnoText.setFillColor(turno == 1 ? sf::Color(255, 100, 100) : sf::Color(100, 200, 255));
-    turnoText.setString("Turno: Jugador " + to_string(turno));
-    turnoText.setPosition({10.f, static_cast<float>(hudY + 15)});
+
+    turnoText.setFillColor(
+        turno == 1
+        ? sf::Color(255, 100, 100)
+        : sf::Color(100, 200, 255)
+    );
+
+    turnoText.setString(
+        "Turno: Jugador " + to_string(turno)
+    );
+
+    turnoText.setPosition({
+        10.f,
+        static_cast<float>(hudY + 15)
+    });
+
     window.draw(turnoText);
+}
 
-    // Vidas jugador 1
-    // Colores del jugador 1: rojo (índice 2) y azul (índice 0)
-    int offsetX = 200; // empezar después del texto de turno
-    for (int j = 1; j <= 4; j++) {
-        Tanque* tank = juego->GetTank(1, j);
-        if (tank == nullptr) continue;
+void GameRenderer::DrawTimeText(int hudY) {
 
-        // Mini sprite del tanque
-        sf::Sprite miniSprite(SelectColor(tank->ObtenerColor()));
-        miniSprite.setScale({0.5f, 0.5f});
-        miniSprite.setPosition({static_cast<float>(offsetX), static_cast<float>(hudY + 10)});
-        if (!tank->EstaVivo()) {
-            miniSprite.setColor(sf::Color(100, 100, 100, 150)); // gris si está muerto
-        }
-        window.draw(miniSprite);
+    int tiempo = juego->ObtenerTiempoRestante();
 
-        // Número de vida al lado
-        sf::Text vidaText(font);
-        vidaText.setCharacterSize(14);
-        vidaText.setFillColor(sf::Color::White);
-        vidaText.setString(to_string(tank->ObtenerVida()) + "%");
-        vidaText.setPosition({static_cast<float>(offsetX + 18), static_cast<float>(hudY + 16)});
-        window.draw(vidaText);
-
-        offsetX += 60; // espacio entre cada tanque
+    if (tiempo < 0) {
+        tiempo = 0;
     }
 
-    // Vidas jugador 2 (lado derecho)
-    offsetX = CELL_SIZE * columns - 260;
+    int minutos = tiempo / 60;
+    int segundos = tiempo % 60;
+
+    string tiempoTexto =
+        "Tiempo: " +
+        to_string(minutos) +
+        ":" +
+        (segundos < 10 ? "0" : "") +
+        to_string(segundos);
+
+    sf::Text tiempoText(font);
+
+    tiempoText.setCharacterSize(16);
+
+    tiempoText.setFillColor(sf::Color::White);
+
+    tiempoText.setString(tiempoTexto);
+
+    tiempoText.setPosition({
+        static_cast<float>((CELL_SIZE * columns) / 2 - 30),
+        static_cast<float>(hudY + 15)
+    });
+
+    window.draw(tiempoText);
+}
+
+void GameRenderer::DrawPlayerHUD(int playerId, int startX, int hudY) {
+
+    int offsetX = startX;
+
     for (int j = 1; j <= 4; j++) {
-        Tanque* tank = juego->GetTank(2, j);
-        if (tank == nullptr) continue;
 
-        sf::Sprite miniSprite(SelectColor(tank->ObtenerColor()));
-        miniSprite.setScale({0.5f, 0.5f});
-        miniSprite.setPosition({static_cast<float>(offsetX), static_cast<float>(hudY + 10)});
-        if (!tank->EstaVivo()) {
-            miniSprite.setColor(sf::Color(100, 100, 100, 150));
+        Tanque* tank = juego->GetTank(playerId, j);
+
+        if (tank == nullptr) {
+            continue;
         }
-        window.draw(miniSprite);
 
-        sf::Text vidaText(font);
-        vidaText.setCharacterSize(14);
-        vidaText.setFillColor(sf::Color::White);
-        vidaText.setString(to_string(tank->ObtenerVida()) + "%");
-        vidaText.setPosition({static_cast<float>(offsetX + 18), static_cast<float>(hudY + 16)});
-        window.draw(vidaText);
+        DrawTankHUD(
+            tank,
+            offsetX,
+            hudY + 10
+        );
 
         offsetX += 60;
     }
 }
+
+void GameRenderer::DrawTankHUD(
+    Tanque* tank,
+    int x,
+    int y
+) {
+
+    sf::Sprite miniSprite(
+        SelectColor(tank->ObtenerColor())
+    );
+
+    miniSprite.setScale({0.5f, 0.5f});
+
+    miniSprite.setPosition({
+        static_cast<float>(x),
+        static_cast<float>(y)
+    });
+
+    if (!tank->EstaVivo()) {
+
+        miniSprite.setColor(
+            sf::Color(100, 100, 100, 150)
+        );
+    }
+
+    window.draw(miniSprite);
+
+    sf::Text vidaText(font);
+
+    vidaText.setCharacterSize(14);
+
+    vidaText.setFillColor(sf::Color::White);
+
+    vidaText.setString(
+        to_string(tank->ObtenerVida()) + "%"
+    );
+
+    vidaText.setPosition({
+        static_cast<float>(x + 18),
+        static_cast<float>(y + 6)
+    });
+
+    window.draw(vidaText);
+}
+
+
 
 

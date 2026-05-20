@@ -42,6 +42,8 @@ add_executable(Tanquitos src/main/main.cpp
         src/algorithms/BFSExplorador.cpp
         src/algorithms/MovimientoAleatorio.cpp
         src/algorithms/LineaVista.cpp
+        src/GameLogic/Bala.cpp
+        src/GameLogic/Bala.h
 )
 target_compile_features(Tanquitos PRIVATE cxx_std_17)
 target_link_libraries(Tanquitos PRIVATE SFML::Graphics)

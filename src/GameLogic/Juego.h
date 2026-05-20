@@ -22,6 +22,16 @@ private:
     sf::Clock stepClock;
     float stepInterval = 0.3f;
     void ImprimirRuta(int* route, int size);
+    bool doubleTurn;
+    bool player1Precise;
+    bool player2Precise;
+    bool applyPrecise;
+    int doubleTurnPlayer = 0;
+    int doubleTurnCount = 0;
+    int* powerUpsInMap;
+    sf::Clock powerUpClock;
+    float powerUpInterval;
+    void GenerarPowerUp();
 
 public:
     Juego(Grafo& mapa, Player* player1, Player* player2);
@@ -40,6 +50,11 @@ public:
     int IsWall(int nodeId);
     Tanque* GetTank(int playerId, int tankId);
     Tanque* TanquePerteneceAJugador(int tankPos, int playerId);
+    int ObtenerTiempoRestante();
+    void AplicarDoubleTurn(int playerId);
+    void ApplyPrecise();
+    void UsePowerUp(); //1 doble turno, 2 precise
+    void
 };
 
 
