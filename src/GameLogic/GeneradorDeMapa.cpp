@@ -11,8 +11,8 @@ bool GeneradorDeMapa::EsNodoUsable(int id, Grafo& grafo) {
     int filas= grafo.ObtenerFilas();
     int columnas = grafo.ObtenerColumnas();
     int totalNodos= filas*columnas;
-
-    if (id!=0&&id!=totalNodos-1) {
+    int nodoVerificador=columnas+1;
+    if (id!=nodoVerificador) {
         return true;
     }
     else {
@@ -29,6 +29,16 @@ void GeneradorDeMapa::ColocarParedesAleatorias(Grafo& grafo) {
     int totalNodos= filas*columnas;
 
     for (int i =0;i<totalNodos;i++) {
+        int x = i % columnas;
+        int y = i/ columnas;
+
+        if (x==0||x==columnas-1||y==0||y==filas-1) {
+            grafo.HacerPared(i);
+            continue;
+        }
+
+
+
         int numeroaleatorio= rand() % 100;
         if (numeroaleatorio<porcentajeParedes && EsNodoUsable(i,grafo)==true) {
             grafo.HacerPared(i);
@@ -53,9 +63,10 @@ void GeneradorDeMapa::LimpiarMapa(Grafo& grafo) {
 
 
 bool GeneradorDeMapa::RevisorMapa(Grafo &grafo) {
-    int nodosAccesibles= ContarNodosConCamino(0,grafo);
-    int filas= grafo.ObtenerFilas();
     int columnas = grafo.ObtenerColumnas();
+    int nodosAccesibles= ContarNodosConCamino(columnas+1,grafo);
+    int filas= grafo.ObtenerFilas();
+
     int totalNodos= filas*columnas;
     int totalParedes=0;
 

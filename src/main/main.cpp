@@ -38,12 +38,12 @@ int main(){
     Tanque* tank2 = new Tanque(2, 1, "rojo", posArr[1]);
     Tanque* tank3 = new Tanque(3, 1, "azul", posArr[2]);
     Tanque* tank4 = new Tanque(4, 1, "azul", posArr[3]);
-    Player* player1 = new Player(1, tank1, tank2, tank3, tank4, "rojo");
+    Player* player1 = new Player(1, tank1, tank2, tank3, tank4);
     Tanque* tank5 = new Tanque(1, 2, "celeste", posArr[4]);
     Tanque* tank6 = new Tanque(2, 2, "celeste", posArr[5]);
     Tanque* tank7 = new Tanque(3, 2, "amarillo", posArr[6]);
     Tanque* tank8 = new Tanque(4, 2, "amarillo", posArr[7]);
-    Player* player2 = new Player(2, tank5, tank6, tank7, tank8, "celeste");
+    Player* player2 = new Player(2, tank5, tank6, tank7, tank8);
     Juego* game = new Juego(*grafo, player1, player2);
     GameRenderer* renderer = new GameRenderer(game, COLUMNS, ROWS);
     renderer->Run();

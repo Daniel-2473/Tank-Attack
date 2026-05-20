@@ -1,11 +1,13 @@
 //
 // Created by yoelr on 25/4/2026.
 //
-#include <iostream> //la de siempre
 
-using namespace std;
+
+
 #ifndef TANQUITOS_NODO_H
 #define TANQUITOS_NODO_H
+#include <iostream> //la de siempre
+using namespace std;
 // este es el header de la clase nodo, el cual define sus atributos y su constructor y destructor
 
 class Nodo {

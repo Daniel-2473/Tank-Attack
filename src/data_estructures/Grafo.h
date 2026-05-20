@@ -1,15 +1,15 @@
 //
 // Created by yoelr on 25/4/2026.
 
-#include <iostream> //la de siempre
-using namespace std;
 
-#include "Nodo.h"
-#include <cstdlib>
+
+
+
+
 #ifndef TANQUITOS_GRAFO_H
 #define TANQUITOS_GRAFO_H
 
-
+#include "Nodo.h"
 class Grafo {
 private:
     int filas;

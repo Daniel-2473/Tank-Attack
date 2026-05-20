@@ -19,6 +19,7 @@ Juego::Juego(Grafo &mapa, Player *player1, Player *player2) {
     this->juegoActivo=false;
     this->turnoActual=1;
     this->tanqueEnMovimiento=nullptr;
+    this->tiempo = 0;
 }
 
 void Juego::Iniciar() {

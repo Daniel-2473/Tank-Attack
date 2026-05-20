@@ -2,13 +2,7 @@
 // Created by yoelr on 25/4/2026.
 //
 #include <iostream> //la de siempre
-#include <cmath> // matematicas
-#include <iomanip>// para los cout
-#include <fstream> //para los file
-#include <string> //para poder usar string en el convertidor
-#include <ctime> //para time
-#include <cstdlib> //para rand y srand
-#include <cstring>
+
 using namespace std;
 #include "Nodo.h"
 
