@@ -133,6 +133,17 @@ void Bala::AvanzarUnPaso() {
 }
 
 
+int Bala::GetPosicionActualId() {
+    if (this->route!=nullptr&&this->pasoActual<routLength) {
+        return this->route[this->pasoActual];
+    }
+    return -1;
+}
 
 
-
+bool Bala::BalaTermino() {
+    if (this->pasoActual>=(this->routLength)-1) {
+        return true;
+    }
+    else return false;
+}

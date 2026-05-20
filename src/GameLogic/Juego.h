@@ -7,6 +7,7 @@
 #include "../data_estructures/Grafo.h"
 #include "Player.h"
 #include "Tanque.h"
+#include "../GameLogic/Bala.h"
 #include <SFML/System/Clock.hpp>
 
 class Juego {
@@ -19,6 +20,10 @@ private:
     bool juegoActivo;
     const int DURACIONMAXIMA = 300;
     Tanque* tanqueEnMovimiento;
+    Bala* balaEnMovimiento;
+    //..
+    sf::Clock balaClock;
+    float balaInterval = 0.1f;
     sf::Clock stepClock;
     float stepInterval = 0.3f;
     void ImprimirRuta(int* route, int size);
@@ -40,6 +45,11 @@ public:
     int IsWall(int nodeId);
     Tanque* GetTank(int playerId, int tankId);
     Tanque* TanquePerteneceAJugador(int tankPos, int playerId);
+    //..
+    void DispararTanque(int tanqueId, int destinoId);
+    Bala* ObtenerBalaEnMovimiento(){return balaEnMovimiento;};
+    void ProcesarBalaPendiente();
+    Tanque* ObtenerTanqueEnCelda(int posicionId);
 };
 
 

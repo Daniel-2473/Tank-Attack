@@ -19,6 +19,7 @@ Juego::Juego(Grafo &mapa, Player *player1, Player *player2) {
     this->juegoActivo=false;
     this->turnoActual=1;
     this->tanqueEnMovimiento=nullptr;
+    this->balaEnMovimiento=nullptr;
     this->tiempo = 0;
 }
 
@@ -43,6 +44,9 @@ void Juego::Actualizar() {
     if (player1->GetTanksLeft()==0||player2->GetTanksLeft()==0||TiempoTerminado()==true) {
         this->juegoActivo=false;
     }
+
+
+
 }
 
 void Juego::CambiarTurno() {
@@ -228,3 +232,87 @@ void Juego::ImprimirRuta(int* route, int size) {
     cout << endl;
 }
 
+
+void Juego::DispararTanque(int tanqueId, int destinoId) {
+    cout<<"Disparando bala del tanque: "<<tanqueId<<endl;
+    if (this->balaEnMovimiento !=nullptr||this->tanqueEnMovimiento!=nullptr||!this->juegoActivo) {
+     return;
+    }
+    Player* jugadorActual;
+    if (turnoActual==1) {
+        jugadorActual = player1;
+        cout<<"Disparando bala del jugador 1"<<endl;
+    }
+    if (turnoActual==2) {
+        jugadorActual = player2;
+        cout<<"Disparando bala del jugador 2"<<endl;
+    }
+    Tanque* tanqueActual=jugadorActual->GetTank(tanqueId);
+    if (tanqueActual==nullptr||!tanqueActual->EstaVivo()) {
+        return;
+    }
+
+    int origenId= tanqueActual->ObtenerPosicion();
+    cout <<"El tanque"<<tanqueId<<"Esta disparando desde: "<<origenId<<" hacia: "<<destinoId<<endl ;
+    balaEnMovimiento = new Bala(origenId,destinoId,turnoActual,*mapa);
+
+    balaClock.restart();
+}
+
+Tanque *Juego::ObtenerTanqueEnCelda(int posicionId) {
+    for (int i =1;i<=4;i++) {
+        Tanque* tanque= player1->GetTank(i);
+        if (tanque != nullptr && tanque->EstaVivo() && tanque->ObtenerPosicion() == posicionId) {
+            return tanque;
+        }
+    }
+
+    for (int i =1;i<=4;i++) {
+        Tanque* tanque= player2->GetTank(i);
+        if (tanque != nullptr && tanque->EstaVivo() && tanque->ObtenerPosicion() == posicionId) {
+            return tanque;
+        }
+    }
+    return nullptr;
+}
+
+
+void Juego::ProcesarBalaPendiente() {
+    if (balaEnMovimiento!=nullptr) {
+        if (balaClock.getElapsedTime().asSeconds() >= balaInterval) {
+            balaEnMovimiento->AvanzarUnPaso();//se avanza primero porque sino en el primer tick la bala estaria en el mismo lugar que el tanque por lo tanto se haria da;o a si mismo
+            balaClock.restart();
+
+            int celdaActualBala=balaEnMovimiento->GetPosicionActualId();
+            Tanque* tanqueAtacado = ObtenerTanqueEnCelda(celdaActualBala);
+
+            if (tanqueAtacado!=nullptr) {
+                string color=tanqueAtacado->ObtenerColor();
+                int damage=0;
+                if (color == "azul"||color=="celeste") {
+                    damage= 25;
+                }
+                else if (color == "rojo" || color == "amarillo") {
+                    damage = 50;
+                }
+
+
+                tanqueAtacado->bajarVida(damage);
+                delete balaEnMovimiento;
+                balaEnMovimiento = nullptr;
+                CambiarTurno();
+                return;
+
+            }
+            if (balaEnMovimiento->BalaTermino()) {
+                delete balaEnMovimiento;
+                balaEnMovimiento = nullptr;
+                CambiarTurno();
+            }
+
+
+
+
+        }
+    }
+}
