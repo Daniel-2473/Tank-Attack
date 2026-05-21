@@ -3,18 +3,26 @@
 //
 #include <cmath>
 #include "../algorithms/LineaVista.h"
+#include "../algorithms/Astar.h"
 #include "Bala.h"
 
 #include <iostream>
 
-Bala::Bala(int OrigenId, int DestinoId, int owner, Grafo &grafo) {
+Bala::Bala(int OrigenId, int DestinoId, int owner, Grafo &grafo, bool AstarPowerUp) {
     this-> owner = owner;
     this-> MAXREBOTES=1;
     this-> rebotesActuales=0;
     this->route= nullptr;
     this->routLength=0;
     this->pasoActual=0;
-    CalcularTrayectoria(OrigenId,DestinoId,grafo);
+
+
+    if (AstarPowerUp) {
+        this->route= Astar(OrigenId,DestinoId,grafo,routLength);
+    }
+    else {
+        CalcularTrayectoria(OrigenId,DestinoId,grafo);
+    }
 }
 
 Bala::~Bala() {

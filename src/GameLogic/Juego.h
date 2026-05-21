@@ -38,6 +38,10 @@ private:
     float powerUpInterval;
     void GenerarPowerUp();
     bool powerUpUsedThisTurn;
+    bool player1FullDamage;
+    bool player2FullDamage;
+    bool player1Astar;
+    bool player2Astar;
 
 public:
     Juego(Grafo& mapa, Player* player1, Player* player2);
@@ -64,6 +68,7 @@ public:
     int ObtenerTiempoRestante();
     void AplicarDoubleTurn(int playerId);
     void ApplyPrecise();
+
     void UsePowerUp(); //1 doble turno, 2 precise
     int PeakPowerUpPlayer(int id);
 };

@@ -29,6 +29,9 @@ Juego::Juego(Grafo &mapa, Player *player1, Player *player2) {
     this->player2Precise = false;
     this->powerUpInterval = 30.f;
     this->powerUpUsedThisTurn = false;
+
+    this->player1FullDamage=false;
+    this->player2FullDamage=false;
 }
 
 void Juego::Iniciar() {
@@ -81,6 +84,15 @@ void Juego::CambiarTurno() {
             player2Precise = true;
         }
         applyPrecise = false;
+    }
+    if (apllyFullDamage) {
+        if (turnoActual==1) {
+            player1FullDamage=true;
+        }
+        else {
+            player2FullDamage=true;
+        }
+        apllyFullDamage=false;
     }
 }
 
@@ -280,12 +292,16 @@ void Juego::ApplyPrecise() {
     applyPrecise = true;
 }
 
+
+
 void Juego::UsePowerUp() {
     if (powerUpUsedThisTurn) {
         cout << "Ya se usó un power-up este turno" << endl;
         return;
     }
+
     int powerUpId;
+
     if (turnoActual == 1) {
         powerUpId = player1->SacarYAplicarPowerUp();
     } else {
@@ -298,6 +314,27 @@ void Juego::UsePowerUp() {
     } else if (powerUpId == 2) {
         ApplyPrecise();
     }
+    if (powerUpId==3) {
+        if (this->turnoActual==1) {
+            this->player1Astar=true;
+        }
+        else {
+            this->player2Astar=true;
+        }
+    }
+
+    if (powerUpId == 4) {
+        if (turnoActual == 1) {
+            player1FullDamage = true;
+        }
+        else {
+            player2FullDamage = true;
+        }
+    }
+
+
+
+
     powerUpUsedThisTurn = true;
 }
 
@@ -342,7 +379,17 @@ void Juego::DispararTanque(int tanqueId, int destinoId) {
 
     int origenId= tanqueActual->ObtenerPosicion();
     cout <<"El tanque"<<tanqueId<<"Esta disparando desde: "<<origenId<<" hacia: "<<destinoId<<endl ;
-    balaEnMovimiento = new Bala(origenId,destinoId,turnoActual,*mapa);
+
+    bool PowerUpAstar = false;
+    if (this->turnoActual==1&&player1Astar) {
+        PowerUpAstar=true;
+        player1Astar=false;
+    }
+    else if (this->turnoActual==2&&player2Astar) {
+        PowerUpAstar=true;
+        player2Astar=false;
+    }
+    balaEnMovimiento = new Bala(origenId,destinoId,turnoActual,*mapa,PowerUpAstar);
 
     balaClock.restart();
 }
@@ -382,6 +429,18 @@ void Juego::ProcesarBalaPendiente() {
                 }
                 else if (color == "rojo" || color == "amarillo") {
                     damage = 50;
+                }
+
+                if ((this->turnoActual==1 && this->player1FullDamage)||(this->turnoActual==2 && this->player2FullDamage)) {
+                    cout<<"El poder destructivo de la bala hizo un daño critico e hizo el 100% del daño"<<endl;
+                    damage = 100;
+
+                    if (this->turnoActual==1) {
+                        this->player1FullDamage=false;
+                    }
+                    else {
+                        this->player2FullDamage=false;
+                    }
                 }
 
 

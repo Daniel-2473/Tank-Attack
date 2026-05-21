@@ -22,7 +22,7 @@ private:
     void CalcularTrayectoria(int origenId, int destinoId, Grafo& grafo);
 
 public:
-    Bala(int OrigenId, int DestinoId, int owner, Grafo& grafo);
+    Bala(int OrigenId, int DestinoId, int owner, Grafo& grafo, bool Astar);
     ~Bala();
     void AvanzarUnPaso();
     int GetPosicionActualId();
