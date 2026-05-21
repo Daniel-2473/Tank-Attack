@@ -27,9 +27,8 @@ Juego::Juego(Grafo &mapa, Player *player1, Player *player2) {
     this->applyPrecise = false;
     this->player1Precise = false;
     this->player2Precise = false;
-    sf::Clock powerUpClock;
-    float powerUpInterval = 30.f;
-    void GenerarPowerUp();
+    this->powerUpInterval = 30.f;
+    this->powerUpUsedThisTurn = false;
 }
 
 void Juego::Iniciar() {
@@ -71,6 +70,7 @@ void Juego::CambiarTurno() {
     } else {
         turnoActual = (turnoActual == 1) ? 2 : 1;
     }
+    powerUpUsedThisTurn = false;
     if (applyPrecise) {
         if (turnoActual == 1) {
             player1Precise = true;
@@ -278,19 +278,24 @@ void Juego::ApplyPrecise() {
 }
 
 void Juego::UsePowerUp() {
+    if (powerUpUsedThisTurn) {
+        cout << "Ya se usó un power-up este turno" << endl;
+        return;
+    }
     int powerUpId;
     if (turnoActual == 1) {
         powerUpId = player1->SacarYAplicarPowerUp();
-    }
-    else {
+    } else {
         powerUpId = player2->SacarYAplicarPowerUp();
     }
+    if (powerUpId == -1) return;
+
     if (powerUpId == 1) {
         AplicarDoubleTurn(turnoActual);
-    }
-    else if (powerUpId == 2) {
+    } else if (powerUpId == 2) {
         ApplyPrecise();
     }
+    powerUpUsedThisTurn = true;
 }
 
 void Juego::GenerarPowerUp() {
@@ -303,4 +308,12 @@ void Juego::GenerarPowerUp() {
     }
 }
 
+int Juego::PeakPowerUpPlayer(int id) {
+    if (id == 1) {
+        return player1->PeakPowerUp();
+    }
+    else {
+        return player2->PeakPowerUp();
+    }
+}
 

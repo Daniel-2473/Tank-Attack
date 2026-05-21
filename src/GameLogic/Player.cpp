@@ -67,5 +67,9 @@ int Player::SacarYAplicarPowerUp() {
     }
 }
 
+int Player::PeakPowerUp() {
+    return powerUps.Peak();
+}
+
 
 

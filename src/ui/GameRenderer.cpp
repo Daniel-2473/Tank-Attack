@@ -7,7 +7,7 @@
 const int CELL_SIZE = 32;
 
 GameRenderer::GameRenderer(Juego* juego, int columns, int rows)
-: window(sf::VideoMode(sf::Vector2u(CELL_SIZE * columns, CELL_SIZE * rows + 50)),"Tank Attack")
+: window(sf::VideoMode(sf::Vector2u(CELL_SIZE * columns, CELL_SIZE * rows + 75)),"Tank Attack")
 {
     this->rows = rows;
     this->columns = columns;
@@ -133,7 +133,8 @@ void GameRenderer::HandleEvents() {
                 window.close();
             }
             if (key->code == sf::Keyboard::Key::LShift) {
-                //Usar power up
+                cout << "Usar powerUp" << endl;
+                juego->UsePowerUp();
             }
         }
         if (event->is<sf::Event::MouseButtonPressed>()) {
@@ -141,6 +142,9 @@ void GameRenderer::HandleEvents() {
             if (mouse->button == sf::Mouse::Button::Left) {
                 int mouseX = mouse->position.x;
                 int mouseY = mouse->position.y;
+                if (mouseY > CELL_SIZE*rows) {
+                    return;
+                }
                 int posId = ScreenToNodeId(mouseX, mouseY);
                 if (selectedTank != nullptr) {
                     if (!juego->HayTanqueEnPosicion(posId)) {
@@ -180,6 +184,9 @@ void GameRenderer::DrawHUD() {
     DrawPlayerHUD(1, 200, hudY);
 
     DrawPlayerHUD(2, CELL_SIZE * columns - 260, hudY);
+
+    DrawPowerUpHUD(hudY, 200, 1);
+    DrawPowerUpHUD(hudY, CELL_SIZE * columns - 260, 2);
 }
 
 void GameRenderer::DrawHUDBackground(int hudY) {
@@ -187,7 +194,7 @@ void GameRenderer::DrawHUDBackground(int hudY) {
 
     hudBackground.setSize({
         static_cast<float>(CELL_SIZE * columns),
-        50.f
+        75.f
     });
 
     hudBackground.setPosition({
@@ -226,6 +233,35 @@ void GameRenderer::DrawTurnText(int hudY) {
     window.draw(turnoText);
 }
 
+void GameRenderer::DrawPowerUpHUD(int hudY, int x, int playerId) {
+    sf::Text powerUpText(font);
+    powerUpText.setCharacterSize(16);
+    powerUpText.setFillColor(sf::Color::White);
+    string powerUpString;
+    int powerUpId = juego->PeakPowerUpPlayer(playerId);
+    if (powerUpId == 1) {
+        powerUpString = "Doble turno";
+    } else if (powerUpId == 2) {
+        powerUpString = "Precision movimiento";
+    } else if (powerUpId == 3) {
+        powerUpString = "Presicion bala";
+    } else if (powerUpId == 4) {
+        powerUpString = "Ataque 100%";
+    } else {
+        powerUpString = "Ninguno";
+    }
+    powerUpText.setString(
+        "Player" + to_string(playerId) + ": " + powerUpString
+    );
+
+    powerUpText.setPosition({
+        static_cast<float>(x),
+        static_cast<float>(hudY + 30)
+    });
+
+    window.draw(powerUpText);
+}
+
 void GameRenderer::DrawTimeText(int hudY) {
 
     int tiempo = juego->ObtenerTiempoRestante();
@@ -253,7 +289,7 @@ void GameRenderer::DrawTimeText(int hudY) {
     tiempoText.setString(tiempoTexto);
 
     tiempoText.setPosition({
-        static_cast<float>((CELL_SIZE * columns) / 2 - 30),
+        static_cast<float>((CELL_SIZE * columns) / 2),
         static_cast<float>(hudY + 15)
     });
 

@@ -14,6 +14,7 @@ public:
     int Dequeue();
     bool IsEmpty();
     ~Queue();
+    int Peak();
 
 private:
     int* arr;

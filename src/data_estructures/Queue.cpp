@@ -73,3 +73,10 @@ bool Queue::IsEmpty() {
 Queue::~Queue() {
     delete[] arr;
 }
+
+int Queue::Peak() {
+    if (IsEmpty()) {
+        return 0;
+    }
+    return arr[front];
+}

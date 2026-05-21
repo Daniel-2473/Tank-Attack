@@ -21,6 +21,7 @@ public:
     void AgregarPowerUp(int tipo);
     bool TienePowerUps();
     int SacarYAplicarPowerUp();
+    int PeakPowerUp();
 
 private:
     enum{ TANKCOUNT = 4};

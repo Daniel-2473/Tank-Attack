@@ -32,6 +32,7 @@ private:
     sf::Clock powerUpClock;
     float powerUpInterval;
     void GenerarPowerUp();
+    bool powerUpUsedThisTurn;
 
 public:
     Juego(Grafo& mapa, Player* player1, Player* player2);
@@ -54,7 +55,7 @@ public:
     void AplicarDoubleTurn(int playerId);
     void ApplyPrecise();
     void UsePowerUp(); //1 doble turno, 2 precise
-    void
+    int PeakPowerUpPlayer(int id);
 };
 
 

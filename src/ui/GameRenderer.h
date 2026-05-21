@@ -26,6 +26,7 @@ private:
     void DrawPlayerHUD(int playerId, int startX, int hudY);
     void DrawTankHUD(Tanque* tank, int x, int y);
     void DrawHUDBackground(int hudY);
+    void DrawPowerUpHUD(int hudY, int x, int playerId);
 
     int ScreenToNodeId(int mouseX, int mouseY);
 
