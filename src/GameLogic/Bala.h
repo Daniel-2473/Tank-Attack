@@ -25,6 +25,8 @@ public:
     Bala(int OrigenId, int DestinoId, int owner, Grafo& grafo);
     ~Bala();
     void AvanzarUnPaso();
+    int GetPosicionActualId();
+    bool BalaTermino();
 };
 
 
