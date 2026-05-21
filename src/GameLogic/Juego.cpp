@@ -85,15 +85,7 @@ void Juego::CambiarTurno() {
         }
         applyPrecise = false;
     }
-    if (apllyFullDamage) {
-        if (turnoActual==1) {
-            player1FullDamage=true;
-        }
-        else {
-            player2FullDamage=true;
-        }
-        apllyFullDamage=false;
-    }
+
 }
 
 void Juego::AplicarDoubleTurn(int playerId) {
